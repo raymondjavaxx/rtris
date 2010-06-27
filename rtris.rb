@@ -1,0 +1,11 @@
+require "sdl"
+
+require File.dirname(__FILE__) + "/rtris/block_matrix"
+require File.dirname(__FILE__) + "/rtris/piece_queue"
+require File.dirname(__FILE__) + "/rtris/random_generator"
+require File.dirname(__FILE__) + "/rtris/lock_delay"
+require File.dirname(__FILE__) + "/rtris/piece"
+require File.dirname(__FILE__) + "/rtris/board"
+require File.dirname(__FILE__) + "/rtris/game"
+require File.dirname(__FILE__) + "/rtris/graphics"
+require File.dirname(__FILE__) + "/rtris/sound"
