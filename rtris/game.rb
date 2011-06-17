@@ -20,10 +20,10 @@
 
 module Rtris
   class Game
+    attr_accessor :current_piece, :board, :piece_queue
 
     def initialize
-      @graphics = Graphics.new
-      @sound = Sound.new
+      #@sound = Sound.new
       @piece_queue = PieceQueue.new
       @lock_delay = LockDelay.new
       @board = Board.new
@@ -42,8 +42,6 @@ module Rtris
       @sound.start_bg_music
 
       while (@should_continue)
-        start_frame
-
         while event = SDL::Event.poll
           case event
           when SDL::Event::KeyDown
@@ -60,27 +58,9 @@ module Rtris
             @down_pressed = SDL::Key.press?(SDL::Key::DOWN)
           end
         end
-
-        @lock_delay.on_frame
-
-        do_physics
-        draw
-
-        end_frame
       end
 
       @sound.stop_music
-    end
-
-    private
-
-    def start_frame
-      @start_time = Time.now
-    end
-
-    def end_frame
-      delta_time = (0.033 - (Time.now - @start_time))
-      sleep delta_time if delta_time > 0.000
     end
 
     def rotate_piece(clockwise = false)
@@ -113,7 +93,7 @@ module Rtris
       end
 
       unless @board.piece_collides?(piece)
-        @sound.play_rotate
+        #@sound.play_rotate
         @current_piece = piece
         @lock_delay.on_rotate
       end
@@ -127,7 +107,7 @@ module Rtris
     end
 
     def lock_piece
-      @sound.play_beam
+      #@sound.play_beam
       @board.merge_piece(@current_piece)
       @current_piece = @piece_queue.pop
 
@@ -139,23 +119,13 @@ module Rtris
       @total_cleared_lines += cleared_lines
     end
 
-    def draw
-      @graphics.begin_drawing
-      @graphics.draw_board(@board)
-      calc_and_draw_ghost_piece
-      @graphics.draw_current_piece(@current_piece)
-      @graphics.draw_piece_queue(@piece_queue)
-      @graphics.end_drawing
-    end
-
-    def calc_and_draw_ghost_piece
+    def ghost_piece
       ghost_piece = @current_piece.dclone
-
       until @board.piece_collides?(ghost_piece, 0, 1)
         ghost_piece.y += 1
       end
 
-      @graphics.draw_ghost_piece(ghost_piece)
+      ghost_piece
     end
 
     def move_piece(x_delta, y_delta)
@@ -163,7 +133,7 @@ module Rtris
         return false
       end
 
-      @sound.play_rotate if x_delta != 0
+      #@sound.play_rotate if x_delta != 0
       @current_piece.x += x_delta
       @current_piece.y += y_delta
       @lock_delay.on_move
@@ -172,6 +142,8 @@ module Rtris
     end
 
     def do_physics
+      @lock_delay.on_frame
+
       if (@step += 1) >= 30 || @down_pressed
         @step = 0
         unless move_piece(0, 1)

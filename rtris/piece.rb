@@ -54,7 +54,7 @@ module Rtris
     end
 
     def rotate(clockwise)
-      side_width = @cells.nitems
+      side_width = @cells.count
       temp = Array.new(side_width).map!{ Array.new(side_width) }
 
       if clockwise

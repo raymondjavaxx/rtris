@@ -20,21 +20,14 @@
 
 module Rtris
   class Graphics
-    SCREEN_WIDTH  = 400
-    SCREEN_HEIGHT = 400
-
     BLOCK_WIDTH  = 18
     BLOCK_HEIGHT = 18
 
     BOARD_OFFSET_X = 9
     BOARD_OFFSET_Y = -17
 
-    def initialize
-      SDL.init(SDL::INIT_VIDEO)
-      @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL::SWSURFACE)
-
-      SDL::WM.set_caption("Rtris", "Rtris")
-      SDL::WM.icon = SDL::Surface.load(File.dirname(__FILE__) + "/img/icon.png")
+    def initialize(window)
+      @window = window
       load_assets
     end
 
@@ -63,8 +56,8 @@ module Rtris
       end
     end
 
-    def begin_drawing
-      SDL.blit_surface(@background, 0, 0, @background.w, @background.h, @screen, 0, 0)
+    def draw_background
+      @background.draw(0, 0, 0)
     end
 
     def end_drawing
@@ -85,24 +78,19 @@ module Rtris
     private
 
     def draw_block(x, y, type)
-      src_rect = [(BLOCK_WIDTH*(type-1)), 0, BLOCK_WIDTH, BLOCK_HEIGHT]
-      dst_coords = [x, y]
-      SDL.blit_surface2(@blocks_sprite, src_rect, @screen, dst_coords)
+      index = type-1
+      @block_sprites[index].draw(x, y, 0)
     end
 
     def draw_ghost_block(x, y)
-      SDL.blit_surface(@ghost_block_sprite, 0, 0, BLOCK_WIDTH, BLOCK_HEIGHT, @screen, x, y)
+      @ghost_block_sprite.draw(x, y, 0)
     end
 
     def load_assets
       img_dir = File.dirname(__FILE__) + "/img"
-
-      @blocks_sprite = SDL::Surface.load(img_dir + "/blocks.png")
-      @background = SDL::Surface.load(img_dir + "/background.png")
-
-      @ghost_block_sprite = SDL::Surface.load(img_dir + "/ghost_block.png")
-      @ghost_block_sprite.set_color_key(SDL::SRCCOLORKEY, @ghost_block_sprite.map_rgb(255, 0, 255))
-      @ghost_block_sprite.set_alpha(SDL::SRCALPHA, 120)
+      @block_sprites = Gosu::Image.load_tiles(@window, img_dir + "/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, true)
+      @background = Gosu::Image.new(@window, img_dir + "/background.png")
+      @ghost_block_sprite = Gosu::Image.new(@window, img_dir + "/ghost_block.png")
     end
   end
 end
