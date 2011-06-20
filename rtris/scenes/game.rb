@@ -29,15 +29,17 @@ module Rtris::Scenes
 
     def button_down(id)
       case id
-      when Gosu::KbUp
+      when Gosu::KbUp, Gosu::GpButton2
         @game.rotate_piece
-      when Gosu::KbRight
+      when Gosu::GpButton1
+        @game.rotate_piece false
+      when Gosu::KbRight, Gosu::GpRight
         @game.move_right
-      when Gosu::KbLeft
+      when Gosu::KbLeft, Gosu::GpLeft
         @game.move_left
-      when Gosu::KbDown
+      when Gosu::KbDown, Gosu::GpDown
         @game.down_pressed = true
-      when Gosu::KbSpace
+      when Gosu::KbSpace, Gosu::GpButton0
         @game.hard_drop
       end
     end

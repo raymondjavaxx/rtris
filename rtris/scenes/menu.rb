@@ -51,7 +51,7 @@ module Rtris::Scenes
     end
 
     def button_down(id)
-      if id == Gosu::KbReturn
+      if id == Gosu::KbReturn or id == Gosu::GpButton7
         @window.scene = Rtris::Scenes::Game.new(@window)
       end
     end
