@@ -1,8 +1,13 @@
 require 'rtris/sound'
 require 'rtris/graphics'
 require 'rtris/core/game'
+require 'rtris/gamepads/xbox360'
 
 module Rtris::Scenes
+  class Gamepad
+    include Rtris::Gamepads::Xbox360
+  end
+
   class Game
     def initialize(window)
       @window = window
@@ -24,22 +29,25 @@ module Rtris::Scenes
     end
 
     def button_up(id)
-      @game.down_pressed = false
+      case id
+      when Gosu::KbDown, Gamepad::ACCEL
+        @game.down_pressed = false
+      end
     end
 
     def button_down(id)
       case id
-      when Gosu::KbUp, Gosu::GpButton2
+      when Gosu::KbUp, Gamepad::ROTATE
         @game.rotate_piece
-      when Gosu::GpButton1
+      when Gamepad::ROTATE_CCW
         @game.rotate_piece false
-      when Gosu::KbRight, Gosu::GpRight
+      when Gosu::KbRight, Gamepad::RIGHT
         @game.move_right
-      when Gosu::KbLeft, Gosu::GpLeft
+      when Gosu::KbLeft, Gamepad::LEFT
         @game.move_left
-      when Gosu::KbDown, Gosu::GpDown
+      when Gosu::KbDown, Gamepad::ACCEL
         @game.down_pressed = true
-      when Gosu::KbSpace, Gosu::GpButton0
+      when Gosu::KbSpace, Gamepad::HARD_DROP
         @game.hard_drop
       end
     end

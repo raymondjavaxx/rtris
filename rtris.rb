@@ -6,3 +6,4 @@ module::Rtris
 end
 
 require "rtris/window"
+

@@ -1,4 +1,10 @@
+require 'rtris/gamepads/xbox360'
+
 module Rtris::Scenes
+  class Gamepad
+    include Rtris::Gamepads::Xbox360
+  end
+
   class Menu
     def initialize(window)
       @window = window
@@ -51,7 +57,7 @@ module Rtris::Scenes
     end
 
     def button_down(id)
-      if id == Gosu::KbReturn or id == Gosu::GpButton7
+      if id == Gosu::KbReturn or id == Gamepad::ENTER
         @window.scene = Rtris::Scenes::Game.new(@window)
       end
     end
