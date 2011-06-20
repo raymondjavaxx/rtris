@@ -18,52 +18,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Rtris
-  class Game
-    attr_accessor :current_piece, :board, :piece_queue
+require 'rtris/core/piece_queue'
+require 'rtris/core/lock_delay'
+require 'rtris/core/board'
+require 'rtris/core/piece'
 
-    def initialize
-      #@sound = Sound.new
+module Rtris::Core
+  class Game
+    attr_accessor :current_piece, :board, :piece_queue, :down_pressed
+
+    def initialize(sound)
+      @sound = sound
+      @sound.start_bg_music
+
       @piece_queue = PieceQueue.new
       @lock_delay = LockDelay.new
       @board = Board.new
 
-      @current_piece = @piece_queue.pop
-
       @step = 0
       @total_cleared_lines = 0
-      @should_continue = true
       @down_pressed = false
       @pre_locking = false
+      @current_piece = @piece_queue.pop
     end
 
-    #game loop
-    def play
-      @sound.start_bg_music
-
-      while (@should_continue)
-        while event = SDL::Event.poll
-          case event
-          when SDL::Event::KeyDown
-            SDL::Key.scan
-            @should_continue = false if SDL::Key.press?(SDL::Key::ESCAPE)
-            @down_pressed = SDL::Key.press?(SDL::Key::DOWN)
-            rotate_piece(true) if SDL::Key.press?(SDL::Key::UP)
-            rotate_piece if SDL::Key.press?(SDL::Key::LSHIFT)
-            move_piece(1, 0) if SDL::Key.press?(SDL::Key::RIGHT)
-            move_piece(-1, 0) if SDL::Key.press?(SDL::Key::LEFT)
-            hard_drop if SDL::Key.press?(SDL::Key::SPACE)
-          when SDL::Event::KeyUp
-            SDL::Key.scan
-            @down_pressed = SDL::Key.press?(SDL::Key::DOWN)
-          end
-        end
-      end
-
-      @sound.stop_music
-    end
-
-    def rotate_piece(clockwise = false)
+    def rotate_piece(clockwise = true)
       piece = @current_piece.dclone
       piece.rotate(clockwise)
 
@@ -93,10 +72,18 @@ module Rtris
       end
 
       unless @board.piece_collides?(piece)
-        #@sound.play_rotate
+        @sound.play_rotate
         @current_piece = piece
         @lock_delay.on_rotate
       end
+    end
+
+    def move_right
+      move_piece(1, 0)
+    end
+
+    def move_left
+      move_piece(-1, 0)
     end
 
     def hard_drop
@@ -107,13 +94,13 @@ module Rtris
     end
 
     def lock_piece
-      #@sound.play_beam
+      @sound.play_beam
       @board.merge_piece(@current_piece)
       @current_piece = @piece_queue.pop
 
       cleared_lines = @board.clear_lines
       if cleared_lines > 0
-        @sound.play_line_voice(cleared_lines)
+        #@sound.play_line_voice(cleared_lines)
       end
 
       @total_cleared_lines += cleared_lines
@@ -128,22 +115,13 @@ module Rtris
       ghost_piece
     end
 
-    def move_piece(x_delta, y_delta)
-      if @board.piece_collides?(@current_piece, x_delta, y_delta)
-        return false
-      end
-
-      #@sound.play_rotate if x_delta != 0
-      @current_piece.x += x_delta
-      @current_piece.y += y_delta
-      @lock_delay.on_move
-      @lock_delay.on_shift if y_delta != 0
-      return true
+    def update
+      @lock_delay.on_frame
+      do_physics
     end
 
+    private
     def do_physics
-      @lock_delay.on_frame
-
       if (@step += 1) >= 30 || @down_pressed
         @step = 0
         unless move_piece(0, 1)
@@ -151,6 +129,19 @@ module Rtris
           # puts "obstructed" if @board.obstructed?
         end
       end
+    end
+
+    def move_piece(x_delta, y_delta)
+      if @board.piece_collides?(@current_piece, x_delta, y_delta)
+        return false
+      end
+
+      @sound.play_rotate if x_delta != 0
+      @current_piece.x += x_delta
+      @current_piece.y += y_delta
+      @lock_delay.on_move
+      @lock_delay.on_shift if y_delta != 0
+      return true
     end
   end
 

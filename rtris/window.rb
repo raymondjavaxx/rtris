@@ -1,39 +1,40 @@
-require 'gosu'
+require 'rtris/scenes/empty'
+require 'rtris/scenes/menu'
+require 'rtris/scenes/game'
 
 module Rtris
   class Window < Gosu::Window
     SCREEN_WIDTH  = 400
     SCREEN_HEIGHT = 400
+    
+    attr_accessor :scene
 
     def initialize
       super SCREEN_WIDTH, SCREEN_HEIGHT, false
       self.caption = "Rtris"
 
-      @game = Game.new
-      @graphics = Graphics.new(self)
+      @scene = Rtris::Scenes::Menu.new(self)
     end
 
     def update
-      if button_down? Gosu::KbUp or button_down? Gosu::GpButton0 then
-        @game.rotate_piece(true)
-      end
-
-      @game.do_physics
+      @scene.update
     end
 
     def draw
-      @graphics.draw_background
-      @graphics.draw_board(@game.board)
-      @graphics.draw_ghost_piece(@game.ghost_piece)
-      @graphics.draw_current_piece(@game.current_piece)
-      @graphics.draw_piece_queue(@game.piece_queue)
+      @scene.draw
+    end
+
+    def button_up(id)
+      @scene.button_up id
+    end
+
+    def needs_cursor?
+      true
     end
 
     def button_down(id)
-      if id == Gosu::KbEscape
-        close
-      end
+      close if id == Gosu::KbEscape
+      @scene.button_down id
     end
   end
-
 end

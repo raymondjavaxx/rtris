@@ -21,40 +21,39 @@
 module Rtris
   class Sound
     def initialize
-      SDL::Mixer.open(SDL::Mixer::DEFAULT_FREQUENCY, SDL::Mixer::FORMAT_U16LSB, 2, 1024)
-
       sfx_dir = File.dirname(__FILE__) + "/sfx"
 
       #load sounds
-      @bg_music = SDL::Mixer::Music.load(sfx_dir + "/midi/korobeiniki_loop.mid")
-      @rotate_sfx = SDL::Mixer::Wave.load(sfx_dir + "/rotate.wav")
-      @beam_sfx = SDL::Mixer::Wave.load(sfx_dir + "/beam.wav")
+      @bg_music = Gosu::Song.new(sfx_dir + "/midi/korobeiniki.ogg")
+      @rotate_sfx = Gosu::Sample.new(sfx_dir + "/rotate.wav")
+      @beam_sfx = Gosu::Sample.new(sfx_dir + "/beam.wav")
 
-      #@line_voices = Array.new
-      #@line_voices.push(SDL::Mixer::Wave.load(sfx_dir + "/voices/double.wav"))
-      #@line_voices.push(SDL::Mixer::Wave.load(sfx_dir + "/voices/double.wav"))
-      #@line_voices.push(SDL::Mixer::Wave.load(sfx_dir + "/voices/triple.wav"))
-      #@line_voices.push(SDL::Mixer::Wave.load(sfx_dir + "/voices/tetris.wav"))
+      @line_voices = Array.new
+      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/double.wav"))
+      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/double.wav"))
+      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/triple.wav"))
+      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/tetris.wav"))
     end
 
     def start_bg_music
-      SDL::Mixer.fade_in_music(@bg_music, -1, 2000)
+      @bg_music.volume = 0.9
+      @bg_music.play true
     end
 
     def play_rotate
-      SDL::Mixer.play_channel(1, @rotate_sfx, 0)
+      @rotate_sfx.play
     end
 
     def play_beam
-      SDL::Mixer.play_channel(2, @beam_sfx, 0)
+      @beam_sfx.play
     end
 
     def stop_music
-      SDL::Mixer.halt_music
+      @bg_music.stop
     end
 
     def play_line_voice(cleared_lines)
-      #SDL::Mixer.play_channel(2, @line_voices[cleared_lines - 1], 0)
+      @line_voices[cleared_lines - 1].play
     end
   end
 end

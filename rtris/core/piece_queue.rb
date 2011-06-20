@@ -18,7 +18,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Rtris
+require 'rtris/core/random_generator'
+
+module Rtris::Core
   class PieceQueue
     def initialize
       @pieces = Array.new

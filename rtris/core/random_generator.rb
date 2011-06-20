@@ -18,61 +18,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Rtris
+require 'rtris/core/piece'
 
-  #TODO: move to Rtris::Piece?
-  class LockDelay
-    FRAMES = 15
+module Rtris::Core
 
+  # Random Generator (Bag of seven)
+  class RandomGenerator
     def initialize
-      restore
+      fill_bag
     end
 
-    def request_lock(&callback)
-      @pre_locking = true
-      @callback = callback
-    end
-
-    def restore
-      @pre_locking = false
-      reset
-    end
-
-    def reset
-      @lock_delay = FRAMES
-    end
-
-    def on_frame
-      decrease_lock_delay if @pre_locking
-      if should_lock?
-        @callback.call()
-        restore
-      end
-    end
-
-    def on_shift
-      restore
-    end
-
-    def on_move
-      reset if pre_locking?
-    end
-
-    def on_rotate
-      on_move
-    end
-
-    def should_lock?
-      pre_locking? && @lock_delay < 1
-    end
-
-    def pre_locking?
-      @pre_locking
+    def make_piece
+      fill_bag if @bag.length == 0
+      return Piece.new(@bag.pop)
     end
 
     private
-    def decrease_lock_delay
-      @lock_delay -= 1
+    def fill_bag
+      @bag = (0..6).to_a.sort_by { rand }
     end
   end
 end

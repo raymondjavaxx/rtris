@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Rtris
+module Rtris::Core
   module BlockMatrix
     def each_cell(&block)
       @cells.each_with_index do |row, y|
