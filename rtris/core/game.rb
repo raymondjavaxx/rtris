@@ -79,11 +79,11 @@ module Rtris::Core
     end
 
     def move_right
-      move_piece(1, 0)
+      @sound.play_rotate if move_piece(1, 0)
     end
 
     def move_left
-      move_piece(-1, 0)
+      @sound.play_rotate if move_piece(-1, 0)
     end
 
     def hard_drop
@@ -136,11 +136,14 @@ module Rtris::Core
         return false
       end
 
-      @sound.play_rotate if x_delta != 0
       @current_piece.x += x_delta
       @current_piece.y += y_delta
       @lock_delay.on_move
-      @lock_delay.on_shift if y_delta != 0
+
+      if y_delta > 0 || !@board.piece_collides?(@current_piece, x_delta, 1)
+        @lock_delay.on_shift
+      end
+
       return true
     end
   end
