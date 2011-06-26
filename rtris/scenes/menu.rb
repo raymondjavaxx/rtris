@@ -19,6 +19,9 @@ module Rtris::Scenes
       @cells = Array.new(25).map!{ Array.new(25).fill {|i| rand(8) } }
     end
 
+    def terminate
+    end
+
     def update
       if (@step += 3) >= 90
         @step = 0
@@ -57,8 +60,11 @@ module Rtris::Scenes
     end
 
     def button_down(id)
-      if id == Gosu::KbReturn or id == Gamepad::ENTER
-        @window.scene = Rtris::Scenes::Game.new(@window)
+      case id
+      when Gosu::KbEscape
+      	@window.close
+      when Gosu::KbReturn, Gamepad::ENTER
+        @window.scene = Game.new(@window)
       end
     end
 

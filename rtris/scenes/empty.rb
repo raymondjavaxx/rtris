@@ -3,6 +3,9 @@ module Rtris::Scenes
     def initialize(sound)
     end
 
+    def terminate
+    end
+
     def update
     end
 

@@ -16,6 +16,10 @@ module Rtris::Scenes
       @game = Rtris::Core::Game.new(@sound)    
     end
 
+    def terminate
+      @sound.stop_music
+    end
+
     def update
       @game.update
     end
@@ -37,6 +41,8 @@ module Rtris::Scenes
 
     def button_down(id)
       case id
+      when Gosu::KbEscape
+      	@window.scene = Menu.new(@window)
       when Gosu::KbUp, Gamepad::ROTATE
         @game.rotate_piece
       when Gamepad::ROTATE_CCW

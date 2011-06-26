@@ -16,6 +16,11 @@ module Rtris
       @scene = Rtris::Scenes::Menu.new(self)
     end
 
+    def scene=(new_scene)
+      @scene.terminate if @scene
+      @scene = new_scene
+    end
+
     def update
       @scene.update
     end
@@ -33,7 +38,6 @@ module Rtris
     end
 
     def button_down(id)
-      close if id == Gosu::KbEscape
       @scene.button_down id
     end
   end
