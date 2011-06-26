@@ -26,11 +26,9 @@ module Rtris::Scenes
       if (@step += 3) >= 90
         @step = 0
 
-        @cells.pop
-        @cells.pop
-
         5.times do
-          row = Array.new(25).fill {|i| rand(8) }
+          row = @cells.pop
+          row.map! { rand(8) }
           @cells.unshift row
         end
       end
