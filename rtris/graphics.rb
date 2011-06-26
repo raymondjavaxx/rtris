@@ -87,7 +87,7 @@ module Rtris
     end
 
     def load_assets
-      img_dir = File.dirname(__FILE__) + "/img"
+      img_dir = File.dirname(__FILE__) + "/assets/img"
       @block_sprites = Gosu::Image.load_tiles(@window, img_dir + "/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, true)
       @background = Gosu::Image.new(@window, img_dir + "/background.png")
       @ghost_block_sprite = Gosu::Image.new(@window, img_dir + "/ghost_block.png")
