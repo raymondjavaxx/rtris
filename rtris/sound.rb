@@ -35,7 +35,7 @@ module Rtris
       #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/tetris.wav"))
     end
 
-    def start_bg_music
+    def play_music
       @bg_music.volume = 0.9
       @bg_music.play true
     end
@@ -46,6 +46,10 @@ module Rtris
 
     def play_beam
       @beam_sfx.play
+    end
+
+    def pause_music
+      @bg_music.pause
     end
 
     def stop_music

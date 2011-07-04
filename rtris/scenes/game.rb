@@ -13,7 +13,18 @@ module Rtris::Scenes
       @window = window
       @sound = Rtris::Sound.new
       @graphics = Rtris::Graphics.new(window)
-      @game = Rtris::Core::Game.new(@sound)    
+      @game = Rtris::Core::Game.new(@sound)
+      @paused = false
+    end
+
+    def toggle_pause
+      @paused = !@paused
+
+      if @paused
+        @sound.pause_music
+      else
+        @sound.play_music
+      end
     end
 
     def terminate
@@ -21,7 +32,7 @@ module Rtris::Scenes
     end
 
     def update
-      @game.update
+      @game.update unless @paused
     end
 
     def draw
@@ -33,28 +44,39 @@ module Rtris::Scenes
     end
 
     def button_up(id)
-      case id
-      when Gosu::KbDown, Gamepad::ACCEL
-        @game.down_pressed = false
+      unless @paused
+        case id
+        when Gosu::KbDown, Gamepad::ACCEL
+          @game.down_pressed = false
+        end
       end
     end
 
     def button_down(id)
       case id
+      when Gosu::KbReturn
+        toggle_pause
       when Gosu::KbEscape
-      	@window.scene = Menu.new(@window)
-      when Gosu::KbUp, Gamepad::ROTATE
-        @game.rotate_piece
-      when Gamepad::ROTATE_CCW
-        @game.rotate_piece false
-      when Gosu::KbRight, Gamepad::RIGHT
-        @game.move_right
-      when Gosu::KbLeft, Gamepad::LEFT
-        @game.move_left
-      when Gosu::KbDown, Gamepad::ACCEL
-        @game.down_pressed = true
-      when Gosu::KbSpace, Gamepad::HARD_DROP
-        @game.hard_drop
+        @window.scene = Menu.new(@window)
+      end
+
+      unless @paused
+        case id
+        when Gosu::KbEscape
+          @window.scene = Menu.new(@window)
+        when Gosu::KbUp, Gamepad::ROTATE
+          @game.rotate_piece
+        when Gamepad::ROTATE_CCW
+          @game.rotate_piece false
+        when Gosu::KbRight, Gamepad::RIGHT
+          @game.move_right
+        when Gosu::KbLeft, Gamepad::LEFT
+          @game.move_left
+        when Gosu::KbDown, Gamepad::ACCEL
+          @game.down_pressed = true
+        when Gosu::KbSpace, Gamepad::HARD_DROP
+          @game.hard_drop
+        end
       end
     end
   end

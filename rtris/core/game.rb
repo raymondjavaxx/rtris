@@ -29,7 +29,7 @@ module Rtris::Core
 
     def initialize(sound)
       @sound = sound
-      @sound.start_bg_music
+      @sound.play_music
 
       @piece_queue = PieceQueue.new
       @lock_delay = LockDelay.new
