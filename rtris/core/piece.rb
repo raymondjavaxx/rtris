@@ -25,7 +25,7 @@ module Rtris::Core
 
     include BlockMatrix
 
-    attr_accessor :x, :y, :cells
+    attr_accessor :x, :y, :cells, :type
 
     # I, J, L, O, S, T, Z
     @@cell_map = [
@@ -52,6 +52,7 @@ module Rtris::Core
     def initialize(type)
       @x = @@start_locations[type][:x]
       @y = @@start_locations[type][:y]
+      @type = type
       @cells = Marshal::load(Marshal.dump(@@cell_map[type]))
     end
 

@@ -41,6 +41,7 @@ module Rtris::Scenes
       @graphics.draw_ghost_piece(@game.ghost_piece)
       @graphics.draw_current_piece(@game.current_piece)
       @graphics.draw_piece_queue(@game.piece_queue)
+      @graphics.draw_score(@game.score)
     end
 
     def button_up(id)

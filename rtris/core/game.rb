@@ -22,10 +22,11 @@ require 'rtris/core/piece_queue'
 require 'rtris/core/lock_delay'
 require 'rtris/core/board'
 require 'rtris/core/piece'
+require 'rtris/core/score'
 
 module Rtris::Core
   class Game
-    attr_accessor :current_piece, :board, :piece_queue, :down_pressed
+    attr_accessor :current_piece, :board, :piece_queue, :down_pressed, :score
 
     def initialize(sound)
       @sound = sound
@@ -34,9 +35,9 @@ module Rtris::Core
       @piece_queue = PieceQueue.new
       @lock_delay = LockDelay.new
       @board = Board.new
+      @score = Score.new
 
       @step = 0
-      @total_cleared_lines = 0
       @down_pressed = false
       @pre_locking = false
       @current_piece = @piece_queue.pop
@@ -87,9 +88,13 @@ module Rtris::Core
     end
 
     def hard_drop
+      origin = @current_piece.y
       until @board.piece_collides?(@current_piece, 0, 1)
         @current_piece.y += 1
       end
+
+      delta = @current_piece.y - origin
+      @score.hard_drop delta
       lock_piece
     end
 
@@ -100,10 +105,9 @@ module Rtris::Core
 
       cleared_lines = @board.clear_lines
       if cleared_lines > 0
+        @score.add_lines cleared_lines
         #@sound.play_line_voice(cleared_lines)
       end
-
-      @total_cleared_lines += cleared_lines
     end
 
     def ghost_piece
@@ -127,6 +131,8 @@ module Rtris::Core
         unless move_piece(0, 1)
           @lock_delay.request_lock { lock_piece }
           # puts "obstructed" if @board.obstructed?
+        else
+          @score.soft_drop if @down_pressed
         end
       end
     end

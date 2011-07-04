@@ -29,6 +29,13 @@ module Rtris
     def initialize(window)
       @window = window
       load_assets
+
+      @font = Gosu::Font.new(window, 'Arial', 36)
+    end
+    
+    def draw_score(score)
+      @font.draw("P: " + score.points.to_s, 200, 300, 0, 1, 1, 0xff000000)
+      @font.draw("L: " + score.lines.to_s, 200, 336, 0, 1, 1, 0xff000000)
     end
 
     def draw_current_piece(piece)
@@ -67,11 +74,9 @@ module Rtris
     def draw_piece_queue(queue)
       5.times do |i|
         piece = queue.peek(i)
-        piece.each_active_cell do |x, y, type|
-          block_x = (x * 16) + 200
-          block_y = (y * 16) + (50 * i) + 20
-          draw_block(block_x, block_y, type)
-        end
+        x = 200
+        y = 50 * i + 16
+        @piece_sprites[piece.type].draw(x, y, 0)
       end
     end
 
@@ -89,6 +94,7 @@ module Rtris
     def load_assets
       img_dir = File.dirname(__FILE__) + "/assets/img"
       @block_sprites = Gosu::Image.load_tiles(@window, img_dir + "/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, true)
+      @piece_sprites = Gosu::Image.load_tiles(@window, img_dir + "/pieces.png", 72, 44, true)
       @background = Gosu::Image.new(@window, img_dir + "/background.png")
       @ghost_block_sprite = Gosu::Image.new(@window, img_dir + "/ghost_block.png")
     end
