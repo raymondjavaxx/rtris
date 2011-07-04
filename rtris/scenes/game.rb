@@ -54,7 +54,7 @@ module Rtris::Scenes
 
     def button_down(id)
       case id
-      when Gosu::KbReturn
+      when Gosu::KbReturn, Gamepad::ENTER
         toggle_pause
       when Gosu::KbEscape
         @window.scene = Menu.new(@window)
