@@ -29,10 +29,8 @@ module Rtris
     def initialize(window)
       @window = window
       load_assets
-
-      @font = Gosu::Font.new(window, 'Arial', 36)
     end
-    
+
     def draw_score(score)
       @font.draw("P: " + score.points.to_s, 200, 300, 0, 1, 1, 0xff000000)
       @font.draw("L: " + score.lines.to_s, 200, 336, 0, 1, 1, 0xff000000)
@@ -46,7 +44,6 @@ module Rtris
       end
     end
 
-    #TODO: merge with draw_current_piece() 
     def draw_ghost_piece(piece)
       piece.each_active_and_visible_cell do |x, y, type|
         block_x = (piece.x * BLOCK_WIDTH)  + (x * BLOCK_WIDTH) + BOARD_OFFSET_X
@@ -65,10 +62,6 @@ module Rtris
 
     def draw_background
       @background.draw(0, 0, 0)
-    end
-
-    def end_drawing
-      @screen.flip
     end
 
     def draw_piece_queue(queue)
@@ -92,11 +85,11 @@ module Rtris
     end
 
     def load_assets
-      img_dir = File.dirname(__FILE__) + "/assets/img"
-      @block_sprites = Gosu::Image.load_tiles(@window, img_dir + "/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, true)
-      @piece_sprites = Gosu::Image.load_tiles(@window, img_dir + "/pieces.png", 72, 44, true)
-      @background = Gosu::Image.new(@window, img_dir + "/background.png")
-      @ghost_block_sprite = Gosu::Image.new(@window, img_dir + "/ghost_block.png")
+      @font = Gosu::Font.new(@window, 'Arial', 36)
+      @block_sprites = Gosu::Image.load_tiles(@window, "rtris/assets/img/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, true)
+      @piece_sprites = Gosu::Image.load_tiles(@window, "rtris/assets/img/pieces.png", 72, 44, true)
+      @background = Gosu::Image.new(@window, "rtris/assets/img/background.png")
+      @ghost_block_sprite = Gosu::Image.new(@window, "rtris/assets/img/ghost_block.png")
     end
   end
 end
