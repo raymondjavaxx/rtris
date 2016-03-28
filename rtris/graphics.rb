@@ -20,11 +20,11 @@
 
 module Rtris
   class Graphics
-    BLOCK_WIDTH  = 18
-    BLOCK_HEIGHT = 18
+    BLOCK_WIDTH  = 32
+    BLOCK_HEIGHT = 32
 
-    BOARD_OFFSET_X = 9
-    BOARD_OFFSET_Y = -17
+    BOARD_OFFSET_X = 480
+    BOARD_OFFSET_Y = -24
 
     def initialize(window)
       @window = window

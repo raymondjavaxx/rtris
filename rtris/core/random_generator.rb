@@ -29,7 +29,7 @@ module Rtris::Core
     end
 
     def make_piece
-      fill_bag if @bag.length == 0
+      fill_bag if @bag.empty?
       return Piece.new(@bag.pop)
     end
 

@@ -4,13 +4,13 @@ require 'rtris/scenes/game'
 
 module Rtris
   class Window < Gosu::Window
-    SCREEN_WIDTH  = 400
-    SCREEN_HEIGHT = 400
+    SCREEN_WIDTH  = 1280
+    SCREEN_HEIGHT = 720
     
     attr_accessor :scene
 
     def initialize
-      super SCREEN_WIDTH, SCREEN_HEIGHT, false
+      super(SCREEN_WIDTH, SCREEN_HEIGHT, true)
       self.caption = "Rtris"
 
       @scene = Rtris::Scenes::Menu.new(self)
