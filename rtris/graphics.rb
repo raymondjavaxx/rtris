@@ -65,10 +65,13 @@ module Rtris
     end
 
     def draw_piece_queue(queue)
-      5.times do |i|
-        piece = queue.peek(i)
-        x = 200
-        y = 50 * i + 16
+      piece = queue.peek(0)
+      @piece_sprites[piece.type].draw(862, 128, 0)
+
+      4.times do |i|
+        piece = queue.peek(i + 1)
+        x = 862
+        y = 222 + (96 * i) + 26
         @piece_sprites[piece.type].draw(x, y, 0)
       end
     end
