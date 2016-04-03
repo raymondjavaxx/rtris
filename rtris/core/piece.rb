@@ -74,7 +74,7 @@ module Rtris::Core
         end
       end
 
-      @cells.replace(temp)
+      @cells = temp
     end
 
     def each_active_and_visible_cell(&block)
