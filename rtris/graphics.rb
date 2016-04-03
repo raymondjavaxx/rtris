@@ -32,8 +32,8 @@ module Rtris
     end
 
     def draw_score(score)
-      @font.draw("P: " + score.points.to_s, 200, 300, 0, 1, 1, 0xff000000)
-      @font.draw("L: " + score.lines.to_s, 200, 336, 0, 1, 1, 0xff000000)
+      @font.draw_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, 0xff204B6C)
+      @font.draw_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, 0xff204B6C)
     end
 
     def draw_current_piece(piece)
@@ -88,7 +88,7 @@ module Rtris
     end
 
     def load_assets
-      @font = Gosu::Font.new(@window, 'Arial', 36)
+      @font = Gosu::Font.new(@window, 'Arial', 72)
       @block_sprites = Gosu::Image.load_tiles(@window, "rtris/assets/img/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, true)
       @piece_sprites = Gosu::Image.load_tiles(@window, "rtris/assets/img/pieces.png", 72, 44, true)
       @background = Gosu::Image.new(@window, "rtris/assets/img/background.png")
