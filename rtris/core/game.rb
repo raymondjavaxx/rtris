@@ -44,7 +44,7 @@ module Rtris::Core
     end
 
     def rotate_piece(clockwise = true)
-      piece = @current_piece.dclone
+      piece = @current_piece.clone
       piece.rotate(clockwise)
 
       if @lock_delay.pre_locking? && !@board.piece_collides?(piece, 0, 1)
@@ -111,7 +111,7 @@ module Rtris::Core
     end
 
     def ghost_piece
-      ghost_piece = @current_piece.dclone
+      ghost_piece = @current_piece.clone
       until @board.piece_collides?(ghost_piece, 0, 1)
         ghost_piece.y += 1
       end

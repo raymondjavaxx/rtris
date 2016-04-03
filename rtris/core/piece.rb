@@ -53,7 +53,7 @@ module Rtris::Core
       @x = @@start_locations[type][:x]
       @y = @@start_locations[type][:y]
       @type = type
-      @cells = Marshal::load(Marshal.dump(@@cell_map[type]))
+      @cells = @@cell_map[type]
     end
 
     def rotate(clockwise)
@@ -75,10 +75,6 @@ module Rtris::Core
       end
 
       @cells.replace(temp)
-    end
-
-    def dclone
-      Marshal::load(Marshal.dump(self))
     end
 
     def each_active_and_visible_cell(&block)
