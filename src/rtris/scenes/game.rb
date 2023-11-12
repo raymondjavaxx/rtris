@@ -70,47 +70,47 @@ module Rtris
 
       def button_up(id)
         return if @paused
-
+        puts id
         case id
         when Gosu::KbUp, Gamepad::ROTATE
           @input.key_released(:rotate)
-        when Gamepad::ROTATE_CCW
+        when Gosu::KB_LEFT_CONTROL, Gosu::KB_RIGHT_CONTROL, Gamepad::ROTATE_CCW
           @input.key_released(:rotate_ccw)
-        when Gosu::KbRight, Gamepad::RIGHT
+        when Gosu::KB_RIGHT, Gamepad::RIGHT
           @input.key_released(:right)
-        when Gosu::KbLeft, Gamepad::LEFT
+        when Gosu::KB_LEFT, Gamepad::LEFT
           @input.key_released(:left)
-        when Gosu::KbDown, Gamepad::ACCEL
+        when Gosu::KB_DOWN, Gamepad::ACCEL
           @input.key_released(:down)
-        when Gosu::KbSpace, Gamepad::HARD_DROP
+        when Gosu::KB_SPACE, Gamepad::HARD_DROP
           @input.key_released(:hard_drop)
         end
       end
 
       def button_down(id)
         case id
-        when Gosu::KbReturn, Gamepad::ENTER
+        when Gosu::KB_RETURN, Gamepad::ENTER
           toggle_pause
-        when Gosu::KbEscape
+        when Gosu::KB_ESCAPE
           @window.scene = Menu.new(@window)
         end
 
         return if @paused
 
         case id
-        when Gosu::KbEscape
+        when Gosu::KB_ESCAPE
           @window.scene = Menu.new(@window)
-        when Gosu::KbUp, Gamepad::ROTATE
+        when Gosu::KB_UP, Gamepad::ROTATE
           @input.key_pressed(:rotate)
-        when Gamepad::ROTATE_CCW
+        when Gosu::KB_LEFT_CONTROL, Gosu::KB_RIGHT_CONTROL, Gamepad::ROTATE_CCW
           @input.key_pressed(:rotate_ccw)
-        when Gosu::KbRight, Gamepad::RIGHT
+        when Gosu::KB_RIGHT, Gamepad::RIGHT
           @input.key_pressed(:right)
-        when Gosu::KbLeft, Gamepad::LEFT
+        when Gosu::KB_LEFT, Gamepad::LEFT
           @input.key_pressed(:left)
-        when Gosu::KbDown, Gamepad::ACCEL
+        when Gosu::KB_DOWN, Gamepad::ACCEL
           @input.key_pressed(:down)
-        when Gosu::KbSpace, Gamepad::HARD_DROP
+        when Gosu::KB_SPACE, Gamepad::HARD_DROP
           @input.key_pressed(:hard_drop)
         end
       end

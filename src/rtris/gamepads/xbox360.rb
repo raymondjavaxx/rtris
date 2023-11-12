@@ -3,14 +3,13 @@
 module Rtris
   module Gamepads
     module Xbox360
-      ENTER      = Gosu::GpButton7
-
-      RIGHT      = Gosu::GpRight
-      LEFT       = Gosu::GpLeft
-      ACCEL      = Gosu::GpDown
-      ROTATE     = Gosu::GpButton2
-      ROTATE_CCW = Gosu::GpButton1
-      HARD_DROP  = Gosu::GpButton0
+      ENTER      = Gosu::GP_BUTTON_9
+      RIGHT      = Gosu::GP_DPAD_RIGHT
+      LEFT       = Gosu::GP_DPAD_LEFT
+      ACCEL      = Gosu::GP_DPAD_DOWN
+      ROTATE     = Gosu::GP_BUTTON_1
+      ROTATE_CCW = Gosu::GP_BUTTON_0
+      HARD_DROP  = Gosu::GP_DPAD_UP
     end
   end
 end

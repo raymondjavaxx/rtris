@@ -15,7 +15,7 @@ module Rtris
       def initialize
         @points = 0
         @lines  = 0
-        @level  = 1
+        @level  = 9
         @goal   = @level * 5
       end
 
