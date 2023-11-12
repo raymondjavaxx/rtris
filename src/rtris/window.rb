@@ -9,7 +9,7 @@ module Rtris
       super(SCREEN_WIDTH, SCREEN_HEIGHT, false)
       self.caption = 'Rtris'
 
-      @scene = Rtris::Scenes::Game.new(self)
+      @scene = Rtris::Scenes::Dev.new(self)
     end
 
     def scene=(new_scene)
