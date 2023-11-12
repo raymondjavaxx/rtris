@@ -82,6 +82,10 @@ module Rtris
         @sound.play_rotate if move_piece(-1, 0)
       end
 
+      def move_down
+        @sound.play_rotate if move_piece(0, 1)
+      end
+
       def hard_drop
         origin = @current_piece.y
         @current_piece.y += 1 until @board.piece_collides?(@current_piece, 0, 1)

@@ -12,6 +12,7 @@ module Rtris
         @sound = Rtris::Sound.new
         @graphics = Rtris::Graphics.new(window)
         @game = Rtris::Core::Game.new(@sound)
+        @input = Rtris::Input.new
         @paused = false
       end
 
@@ -30,7 +31,28 @@ module Rtris
       end
 
       def update
-        @game.update unless @paused
+        return if @paused
+
+        if @input.left?
+          @game.move_left
+        elsif @input.right?
+          @game.move_right
+        end
+
+        if @input.down?
+          @game.move_down
+        elsif @input.hard_drop?
+          @game.hard_drop
+        end
+
+        if @input.rotate?
+          @game.rotate_piece(clockwise: true)
+        elsif @input.rotate_ccw?
+          @game.rotate_piece(clockwise: false)
+        end
+
+        @game.update
+        @input.tick
       end
 
       def draw
@@ -50,8 +72,18 @@ module Rtris
         return if @paused
 
         case id
+        when Gosu::KbUp, Gamepad::ROTATE
+          @input.key_released(:rotate)
+        when Gamepad::ROTATE_CCW
+          @input.key_released(:rotate_ccw)
+        when Gosu::KbRight, Gamepad::RIGHT
+          @input.key_released(:right)
+        when Gosu::KbLeft, Gamepad::LEFT
+          @input.key_released(:left)
         when Gosu::KbDown, Gamepad::ACCEL
-          @game.down_pressed = false
+          @input.key_released(:down)
+        when Gosu::KbSpace, Gamepad::HARD_DROP
+          @input.key_released(:hard_drop)
         end
       end
 
@@ -69,17 +101,17 @@ module Rtris
         when Gosu::KbEscape
           @window.scene = Menu.new(@window)
         when Gosu::KbUp, Gamepad::ROTATE
-          @game.rotate_piece(clockwise: true)
+          @input.key_pressed(:rotate)
         when Gamepad::ROTATE_CCW
-          @game.rotate_piece(clockwise: false)
+          @input.key_pressed(:rotate_ccw)
         when Gosu::KbRight, Gamepad::RIGHT
-          @game.move_right
+          @input.key_pressed(:right)
         when Gosu::KbLeft, Gamepad::LEFT
-          @game.move_left
+          @input.key_pressed(:left)
         when Gosu::KbDown, Gamepad::ACCEL
-          @game.down_pressed = true
+          @input.key_pressed(:down)
         when Gosu::KbSpace, Gamepad::HARD_DROP
-          @game.hard_drop
+          @input.key_pressed(:hard_drop)
         end
       end
     end
