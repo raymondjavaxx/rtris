@@ -28,7 +28,7 @@ module Rtris
     BOARD_OFFSET_X = 480
     BOARD_OFFSET_Y = -24
 
-    TEXT_COLOR = 0xff204B6C
+    TEXT_COLOR = Gosu::Color.new(0xff_204B6C)
 
     def initialize(window)
       @window = window
@@ -94,12 +94,11 @@ module Rtris
     def load_assets
       @font = Gosu::Font.new(72, name: 'Arial')
 
-      assets_path = File.expand_path('assets', __dir__)
-      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/img/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT,
-                                              tileable: true)
-      @piece_sprites = Gosu::Image.load_tiles("#{assets_path}/img/pieces.png", 72, 44, tileable: true)
-      @background = Gosu::Image.new("#{assets_path}/img/background.png")
-      @ghost_block_sprite = Gosu::Image.new("#{assets_path}/img/ghost_block.png")
+      assets_path = File.expand_path('assets/img', __dir__)
+      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, tileable: true)
+      @piece_sprites = Gosu::Image.load_tiles("#{assets_path}/pieces.png", 72, 44, tileable: true)
+      @background = Gosu::Image.new("#{assets_path}/background.png")
+      @ghost_block_sprite = Gosu::Image.new("#{assets_path}/ghost_block.png")
     end
   end
 end
