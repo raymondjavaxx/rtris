@@ -62,7 +62,7 @@ module Rtris
         else
           @graphics.draw_board(@game.board)
           @graphics.draw_ghost_piece(@game.ghost_piece)
-          @graphics.draw_current_piece(@game.current_piece)
+          @graphics.draw_current_piece(@game.current_piece, offset: 0)
           @graphics.draw_piece_queue(@game.piece_queue)
         end
         @graphics.draw_score(@game.score)

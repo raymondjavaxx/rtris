@@ -23,7 +23,25 @@
 module Rtris
   module Core
     class Game
-      attr_accessor :current_piece, :board, :piece_queue, :down_pressed, :score
+      GRAVITY_MAP = {
+        1 => 0.01667,
+        2 => 0.021017,
+        3 => 0.026977,
+        4 => 0.035256,
+        5 => 0.04693,
+        6 => 0.06361,
+        7 => 0.0879,
+        8 => 0.1236,
+        9 => 0.1775,
+        10 => 0.2598,
+        11 => 0.388,
+        12 => 0.59,
+        13 => 0.92,
+        14 => 1.46,
+        15 => 2.36
+      }
+
+      attr_accessor :current_piece, :board, :piece_queue, :score, :acc
 
       def initialize(sound)
         @sound = sound
@@ -34,10 +52,13 @@ module Rtris
         @board = Board.new
         @score = Score.new
 
-        @step = 0
-        @down_pressed = false
+        @acc = 0
         @pre_locking = false
         @current_piece = @piece_queue.pop
+      end
+
+      def gravity
+        GRAVITY_MAP[score.level] || 2.36
       end
 
       def rotate_piece(clockwise:)
@@ -122,14 +143,20 @@ module Rtris
       private
 
       def do_physics
-        return unless (@step += 1) >= 30 || @down_pressed
+        return if @lock_delay.pre_locking?
 
-        @step = 0
-        if move_piece(0, 1)
-          @score.soft_drop if @down_pressed
-        else
-          @lock_delay.request_lock { lock_piece }
-          # puts "obstructed" if @board.obstructed?
+        @acc += gravity
+
+        while @acc >= 1
+          @acc -= 1
+          @pre_locking = false
+
+          if move_piece(0, 1)
+            @score.soft_drop if true # TODO: @step == 0
+          else
+            @lock_delay.request_lock { lock_piece }
+            # puts "obstructed" if @board.obstructed?
+          end
         end
       end
 

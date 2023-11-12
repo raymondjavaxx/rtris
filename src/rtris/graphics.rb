@@ -45,11 +45,11 @@ module Rtris
       @medium_font.draw_text_rel('Paused', 640, 360, 0, 0.5, 0.5, 1, 1, PAUSED_TEXT_COLOR)
     end
 
-    def draw_current_piece(piece)
+    def draw_current_piece(piece, offset:)
       piece.each_active_and_visible_cell do |x, y, type|
         block_x = (piece.x * BLOCK_WIDTH)  + (x * BLOCK_WIDTH) + BOARD_OFFSET_X
         block_y = (piece.y * BLOCK_HEIGHT) + (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y
-        draw_block(block_x, block_y, type)
+        draw_block(block_x, block_y + (BLOCK_HEIGHT * offset), type)
       end
     end
 
