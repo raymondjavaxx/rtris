@@ -12,7 +12,6 @@ module Rtris
         @sound = Rtris::Sound.new
         @graphics = Rtris::Graphics.new(window)
         @game = Rtris::Core::Game.new(@sound)
-        @input = Rtris::Input.new
         @paused = false
       end
 
@@ -31,28 +30,7 @@ module Rtris
       end
 
       def update
-        return if @paused
-
-        if @input.left?
-          @game.move_left
-        elsif @input.right?
-          @game.move_right
-        end
-
-        if @input.down?
-          @game.move_down
-        elsif @input.hard_drop?
-          @game.hard_drop
-        end
-
-        if @input.rotate?
-          @game.rotate_piece(clockwise: true)
-        elsif @input.rotate_ccw?
-          @game.rotate_piece(clockwise: false)
-        end
-
-        @game.update
-        @input.tick
+        @game.update unless @paused
       end
 
       def draw
@@ -70,20 +48,20 @@ module Rtris
 
       def button_up(id)
         return if @paused
-        puts id
+
         case id
         when Gosu::KbUp, Gamepad::ROTATE
-          @input.key_released(:rotate)
+          @game.input.key_released(:rotate)
         when Gosu::KB_LEFT_CONTROL, Gosu::KB_RIGHT_CONTROL, Gamepad::ROTATE_CCW
-          @input.key_released(:rotate_ccw)
+          @game.input.key_released(:rotate_ccw)
         when Gosu::KB_RIGHT, Gamepad::RIGHT
-          @input.key_released(:right)
+          @game.input.key_released(:right)
         when Gosu::KB_LEFT, Gamepad::LEFT
-          @input.key_released(:left)
+          @game.input.key_released(:left)
         when Gosu::KB_DOWN, Gamepad::ACCEL
-          @input.key_released(:down)
+          @game.input.key_released(:down)
         when Gosu::KB_SPACE, Gamepad::HARD_DROP
-          @input.key_released(:hard_drop)
+          @game.input.key_released(:hard_drop)
         end
       end
 
@@ -101,17 +79,17 @@ module Rtris
         when Gosu::KB_ESCAPE
           @window.scene = Menu.new(@window)
         when Gosu::KB_UP, Gamepad::ROTATE
-          @input.key_pressed(:rotate)
+          @game.input.key_pressed(:rotate)
         when Gosu::KB_LEFT_CONTROL, Gosu::KB_RIGHT_CONTROL, Gamepad::ROTATE_CCW
-          @input.key_pressed(:rotate_ccw)
+          @game.input.key_pressed(:rotate_ccw)
         when Gosu::KB_RIGHT, Gamepad::RIGHT
-          @input.key_pressed(:right)
+          @game.input.key_pressed(:right)
         when Gosu::KB_LEFT, Gamepad::LEFT
-          @input.key_pressed(:left)
+          @game.input.key_pressed(:left)
         when Gosu::KB_DOWN, Gamepad::ACCEL
-          @input.key_pressed(:down)
+          @game.input.key_pressed(:down)
         when Gosu::KB_SPACE, Gamepad::HARD_DROP
-          @input.key_pressed(:hard_drop)
+          @game.input.key_pressed(:hard_drop)
         end
       end
     end

@@ -23,25 +23,7 @@
 module Rtris
   module Core
     class Game
-      GRAVITY_MAP = {
-        1 => 0.01667,
-        2 => 0.021017,
-        3 => 0.026977,
-        4 => 0.035256,
-        5 => 0.04693,
-        6 => 0.06361,
-        7 => 0.0879,
-        8 => 0.1236,
-        9 => 0.1775,
-        10 => 0.2598,
-        11 => 0.388,
-        12 => 0.59,
-        13 => 0.92,
-        14 => 1.46,
-        15 => 2.36
-      }
-
-      attr_accessor :current_piece, :board, :piece_queue, :score, :acc
+      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input
 
       def initialize(sound)
         @sound = sound
@@ -51,14 +33,20 @@ module Rtris
         @lock_delay = LockDelay.new
         @board = Board.new
         @score = Score.new
+        @input = Input.new
 
         @acc = 0
         @pre_locking = false
         @current_piece = @piece_queue.pop
+
+        @fall_speed_cache = {}
       end
 
-      def gravity
-        GRAVITY_MAP[score.level] || 2.36
+      def fall_speed
+        @fall_speed_cache[@score.level] ||= begin
+          seconds_per_line = (0.8 - ((@score.level - 1) * 0.007))**(@score.level - 1)
+          1 / (seconds_per_line * 60)
+        end
       end
 
       def rotate_piece(clockwise:)
@@ -103,10 +91,6 @@ module Rtris
         @sound.play_rotate if move_piece(-1, 0)
       end
 
-      def move_down
-        @sound.play_rotate if move_piece(0, 1)
-      end
-
       def hard_drop
         origin = @current_piece.y
         @current_piece.y += 1 until @board.piece_collides?(@current_piece, 0, 1)
@@ -136,6 +120,23 @@ module Rtris
       end
 
       def update
+        if @input.left?
+          move_left
+        elsif @input.right?
+          move_right
+        end
+
+        if @input.hard_drop?
+          hard_drop
+        end
+
+        if @input.rotate?
+          rotate_piece(clockwise: true)
+        elsif @input.rotate_ccw?
+          rotate_piece(clockwise: false)
+        end
+
+        @input.tick
         @lock_delay.on_frame
         do_physics
       end
@@ -145,7 +146,8 @@ module Rtris
       def do_physics
         return if @lock_delay.pre_locking?
 
-        @acc += gravity
+        effective_fall_speed = @input.down? ? fall_speed * 20 : fall_speed
+        @acc += effective_fall_speed
 
         while @acc >= 1
           @acc -= 1
