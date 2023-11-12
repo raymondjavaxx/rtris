@@ -28,7 +28,8 @@ module Rtris
     BOARD_OFFSET_X = 480
     BOARD_OFFSET_Y = -24
 
-    TEXT_COLOR = Gosu::Color.new(0xff_204B6C)
+    SCORE_TEXT_COLOR = Gosu::Color.new(0xFF_204B6C)
+    PAUSED_TEXT_COLOR = Gosu::Color.new(0xFF_FFFFFF)
 
     def initialize(window)
       @window = window
@@ -36,8 +37,12 @@ module Rtris
     end
 
     def draw_score(score)
-      @font.draw_text_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, TEXT_COLOR)
-      @font.draw_text_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, TEXT_COLOR)
+      @large_font.draw_text_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+      @large_font.draw_text_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+    end
+
+    def draw_paused
+      @medium_font.draw_text_rel('Paused', 640, 360, 0, 0.5, 0.5, 1, 1, PAUSED_TEXT_COLOR)
     end
 
     def draw_current_piece(piece)
@@ -92,7 +97,8 @@ module Rtris
     end
 
     def load_assets
-      @font = Gosu::Font.new(72, name: 'Arial')
+      @large_font = Gosu::Font.new(72, name: 'Arial')
+      @medium_font = Gosu::Font.new(48, name: 'Arial')
 
       assets_path = File.expand_path('assets/img', __dir__)
       @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, tileable: true)

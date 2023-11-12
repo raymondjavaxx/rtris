@@ -35,10 +35,14 @@ module Rtris
 
       def draw
         @graphics.draw_background
-        @graphics.draw_board(@game.board)
-        @graphics.draw_ghost_piece(@game.ghost_piece)
-        @graphics.draw_current_piece(@game.current_piece)
-        @graphics.draw_piece_queue(@game.piece_queue)
+        if @paused
+          @graphics.draw_paused
+        else
+          @graphics.draw_board(@game.board)
+          @graphics.draw_ghost_piece(@game.ghost_piece)
+          @graphics.draw_current_piece(@game.current_piece)
+          @graphics.draw_piece_queue(@game.piece_queue)
+        end
         @graphics.draw_score(@game.score)
       end
 
