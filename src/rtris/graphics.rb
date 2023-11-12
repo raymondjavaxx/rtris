@@ -93,10 +93,13 @@ module Rtris
 
     def load_assets
       @font = Gosu::Font.new(72, name: 'Arial')
-      @block_sprites = Gosu::Image.load_tiles('rtris/assets/img/blocks.png', BLOCK_WIDTH, BLOCK_HEIGHT, tileable: true)
-      @piece_sprites = Gosu::Image.load_tiles('rtris/assets/img/pieces.png', 72, 44, tileable: true)
-      @background = Gosu::Image.new('rtris/assets/img/background.png')
-      @ghost_block_sprite = Gosu::Image.new('rtris/assets/img/ghost_block.png')
+
+      assets_path = File.expand_path('assets', __dir__)
+      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/img/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT,
+                                              tileable: true)
+      @piece_sprites = Gosu::Image.load_tiles("#{assets_path}/img/pieces.png", 72, 44, tileable: true)
+      @background = Gosu::Image.new("#{assets_path}/img/background.png")
+      @ghost_block_sprite = Gosu::Image.new("#{assets_path}/img/ghost_block.png")
     end
   end
 end

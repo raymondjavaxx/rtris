@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "#{File.dirname(__FILE__)}/rtris"
+require_relative 'src/rtris'
 
 window = Rtris::Window.new
 window.show

@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require 'rtris/sound'
-require 'rtris/graphics'
-require 'rtris/core/game'
-require 'rtris/gamepads/xbox360'
-
 module Rtris
   module Scenes
     class Gamepad

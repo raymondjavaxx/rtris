@@ -30,6 +30,7 @@ GEM
       rubocop (~> 1.0)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.5.0)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   ruby
@@ -38,6 +39,7 @@ DEPENDENCIES
   gosu
   rubocop
   rubocop-rake
+  zeitwerk
 
 BUNDLED WITH
    2.4.10

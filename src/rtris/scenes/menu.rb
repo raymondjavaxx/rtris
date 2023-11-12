@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rtris/gamepads/xbox360'
-
 module Rtris
   module Scenes
     class Gamepad
@@ -11,12 +9,13 @@ module Rtris
     class Menu
       def initialize(window)
         @window = window
-        @logo = Gosu::Image.new('rtris/assets/img/logo.png')
-        @background = Gosu::Image.new('rtris/assets/img/menu_gradient.jpg')
-        @mask = Gosu::Image.new('rtris/assets/img/menu_alpha_mask.png')
-        @block_sprites = Gosu::Image.load_tiles('rtris/assets/img/blocks.png', 32, 32, tileable: true)
 
-        @new_game_text = Gosu::Image.new('rtris/assets/img/new_game_text.png')
+        assets_path = File.expand_path('../assets', __dir__)
+        @logo = Gosu::Image.new("#{assets_path}/img/logo.png")
+        @background = Gosu::Image.new("#{assets_path}/img/menu_gradient.jpg")
+        @mask = Gosu::Image.new("#{assets_path}/img/menu_alpha_mask.png")
+        @block_sprites = Gosu::Image.load_tiles("#{assets_path}/img/blocks.png", 32, 32, tileable: true)
+        @new_game_text = Gosu::Image.new("#{assets_path}/img/new_game_text.png")
 
         @step = 0
         @cells = Array.new(25).map! { Array.new(40).fill { |_i| rand(8) } }

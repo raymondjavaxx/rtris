@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'rtris/scenes/empty'
-require 'rtris/scenes/menu'
-require 'rtris/scenes/game'
-
 module Rtris
   class Window < Gosu::Window
     SCREEN_WIDTH  = 1280

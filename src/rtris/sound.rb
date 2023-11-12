@@ -23,7 +23,7 @@
 module Rtris
   class Sound
     def initialize
-      sfx_dir = "#{File.dirname(__FILE__)}/assets/sfx"
+      sfx_dir = File.expand_path('assets/sfx', __dir__)
 
       # load sounds
       @bg_music = Gosu::Song.new("#{sfx_dir}/midi/korobeiniki.ogg")

@@ -20,12 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'rtris/core/piece_queue'
-require 'rtris/core/lock_delay'
-require 'rtris/core/board'
-require 'rtris/core/piece'
-require 'rtris/core/score'
-
 module Rtris
   module Core
     class Game
