@@ -23,7 +23,7 @@
 module Rtris
   module Core
     class Game
-      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input
+      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input, :hard_drop_trails
 
       def initialize(sound)
         @sound = sound
@@ -40,6 +40,7 @@ module Rtris
         @current_piece = @piece_queue.pop
 
         @fall_speed_cache = {}
+        @hard_drop_trails = []
       end
 
       def fall_speed
@@ -95,6 +96,8 @@ module Rtris
         origin = @current_piece.y
         @current_piece.y += 1 until @board.piece_collides?(@current_piece, 0, 1)
 
+        @hard_drop_trails << HardDropTrail.new(@current_piece.x, @current_piece.y)
+
         delta = @current_piece.y - origin
         @score.hard_drop delta
         lock_piece
@@ -128,9 +131,7 @@ module Rtris
 
         if @input.hard_drop?
           hard_drop
-        end
-
-        if @input.rotate?
+        elsif @input.rotate?
           rotate_piece(clockwise: true)
         elsif @input.rotate_ccw?
           rotate_piece(clockwise: false)
@@ -138,6 +139,10 @@ module Rtris
 
         @input.tick
         @lock_delay.on_frame
+
+        @hard_drop_trails.each(&:tick)
+        @hard_drop_trails.reject!(&:dead?)
+
         do_physics
       end
 

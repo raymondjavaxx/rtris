@@ -85,6 +85,12 @@ module Rtris
       end
     end
 
+    def draw_hard_drop_trail(x:, y:, opacity:)
+      screen_x = (x * BLOCK_WIDTH)  + BOARD_OFFSET_X
+      screen_y = (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y - @hard_drop_trail_sprite.height
+      @hard_drop_trail_sprite.draw(screen_x, screen_y, 0, 1, 1, Gosu::Color.new(opacity * 255, 255, 255, 255))
+    end
+
     private
 
     def draw_block(x, y, type)
@@ -105,6 +111,7 @@ module Rtris
       @piece_sprites = Gosu::Image.load_tiles("#{assets_path}/pieces.png", 72, 44, tileable: true)
       @background = Gosu::Image.new("#{assets_path}/background.png")
       @ghost_block_sprite = Gosu::Image.new("#{assets_path}/ghost_block.png")
+      @hard_drop_trail_sprite = Gosu::Image.new("#{assets_path}/hard_drop_trail.png")
     end
   end
 end

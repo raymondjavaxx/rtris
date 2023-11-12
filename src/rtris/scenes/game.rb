@@ -39,6 +39,11 @@ module Rtris
           @graphics.draw_paused
         else
           @graphics.draw_board(@game.board)
+
+          @game.hard_drop_trails.each do |trail|
+            @graphics.draw_hard_drop_trail(x: trail.x, y: trail.y, opacity: trail.opacity)
+          end
+
           @graphics.draw_ghost_piece(@game.ghost_piece)
           @graphics.draw_current_piece(@game.current_piece, offset: 0)
           @graphics.draw_piece_queue(@game.piece_queue)
