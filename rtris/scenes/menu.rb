@@ -61,7 +61,7 @@ module Rtris::Scenes
       case id
       when Gosu::KbEscape
       	@window.close
-      when Gosu::KbReturn, Gamepad::ENTER
+      else
         @window.scene = Game.new(@window)
       end
     end

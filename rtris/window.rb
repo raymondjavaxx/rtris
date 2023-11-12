@@ -10,7 +10,7 @@ module Rtris
     attr_accessor :scene
 
     def initialize
-      super(SCREEN_WIDTH, SCREEN_HEIGHT, true)
+      super(SCREEN_WIDTH, SCREEN_HEIGHT, false)
       self.caption = "Rtris"
 
       @scene = Rtris::Scenes::Menu.new(self)
