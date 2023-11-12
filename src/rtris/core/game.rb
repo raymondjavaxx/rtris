@@ -96,7 +96,9 @@ module Rtris
         origin = @current_piece.y
         @current_piece.y += 1 until @board.piece_collides?(@current_piece, 0, 1)
 
-        @hard_drop_trails << HardDropTrail.new(@current_piece.x, @current_piece.y)
+        @current_piece.each_top_cell do |cell_x, cell_y|
+          @hard_drop_trails << HardDropTrail.new(cell_x, cell_y)
+        end
 
         delta = @current_piece.y - origin
         @score.hard_drop delta

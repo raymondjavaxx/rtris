@@ -82,6 +82,17 @@ module Rtris
           block.call(cell_x, cell_y, cell) if (cell_y + @y) > 1
         end
       end
+
+      def each_top_cell(&block)
+        @cells[0].count.times do |col|
+          @cells.count.times do |row|
+            if (@cells[row][col]).positive?
+              block.call(col + @x, row + @y)
+              break
+            end
+          end
+        end
+      end
     end
   end
 end

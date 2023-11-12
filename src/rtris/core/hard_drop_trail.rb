@@ -5,7 +5,7 @@ module Rtris
     class HardDropTrail
       ##
       # Time in frames before the trail disappears.
-      DEFAULT_LIFESPAN = 30
+      DEFAULT_LIFESPAN = 25
 
       attr_accessor :x, :y, :width
 
@@ -24,7 +24,7 @@ module Rtris
       end
 
       def opacity
-        @lifespan.to_f / DEFAULT_LIFESPAN.to_f
+        @lifespan.to_f / DEFAULT_LIFESPAN
       end
     end
   end
