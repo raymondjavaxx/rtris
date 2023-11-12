@@ -42,7 +42,7 @@ module Rtris
     end
 
     def draw_paused
-      @medium_font.draw_text_rel('Paused', 640, 360, 0, 0.5, 0.5, 1, 1, PAUSED_TEXT_COLOR)
+      @medium_font.draw_text_rel('Pause', 640, 360, 0, 0.5, 0.5, 1, 1, PAUSED_TEXT_COLOR)
     end
 
     def draw_current_piece(piece, offset:)
