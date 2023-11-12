@@ -28,14 +28,16 @@ module Rtris
     BOARD_OFFSET_X = 480
     BOARD_OFFSET_Y = -24
 
+    TEXT_COLOR = 0xff204B6C
+
     def initialize(window)
       @window = window
       load_assets
     end
 
     def draw_score(score)
-      @font.draw_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, 0xff204B6C)
-      @font.draw_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, 0xff204B6C)
+      @font.draw_text_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, TEXT_COLOR)
+      @font.draw_text_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, TEXT_COLOR)
     end
 
     def draw_current_piece(piece)
@@ -90,11 +92,11 @@ module Rtris
     end
 
     def load_assets
-      @font = Gosu::Font.new(@window, 'Arial', 72)
-      @block_sprites = Gosu::Image.load_tiles(@window, 'rtris/assets/img/blocks.png', BLOCK_WIDTH, BLOCK_HEIGHT, true)
-      @piece_sprites = Gosu::Image.load_tiles(@window, 'rtris/assets/img/pieces.png', 72, 44, true)
-      @background = Gosu::Image.new(@window, 'rtris/assets/img/background.png')
-      @ghost_block_sprite = Gosu::Image.new(@window, 'rtris/assets/img/ghost_block.png')
+      @font = Gosu::Font.new(72, name: 'Arial')
+      @block_sprites = Gosu::Image.load_tiles('rtris/assets/img/blocks.png', BLOCK_WIDTH, BLOCK_HEIGHT, tileable: true)
+      @piece_sprites = Gosu::Image.load_tiles('rtris/assets/img/pieces.png', 72, 44, tileable: true)
+      @background = Gosu::Image.new('rtris/assets/img/background.png')
+      @ghost_block_sprite = Gosu::Image.new('rtris/assets/img/ghost_block.png')
     end
   end
 end

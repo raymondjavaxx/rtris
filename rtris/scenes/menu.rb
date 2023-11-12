@@ -11,12 +11,12 @@ module Rtris
     class Menu
       def initialize(window)
         @window = window
-        @logo = Gosu::Image.new(@window, 'rtris/assets/img/logo.png')
-        @background = Gosu::Image.new(@window, 'rtris/assets/img/menu_gradient.jpg')
-        @mask = Gosu::Image.new(@window, 'rtris/assets/img/menu_alpha_mask.png')
-        @block_sprites = Gosu::Image.load_tiles(@window, 'rtris/assets/img/blocks.png', 32, 32, true)
+        @logo = Gosu::Image.new('rtris/assets/img/logo.png')
+        @background = Gosu::Image.new('rtris/assets/img/menu_gradient.jpg')
+        @mask = Gosu::Image.new('rtris/assets/img/menu_alpha_mask.png')
+        @block_sprites = Gosu::Image.load_tiles('rtris/assets/img/blocks.png', 32, 32, tileable: true)
 
-        @new_game_text = Gosu::Image.new(@window, 'rtris/assets/img/new_game_text.png')
+        @new_game_text = Gosu::Image.new('rtris/assets/img/new_game_text.png')
 
         @step = 0
         @cells = Array.new(25).map! { Array.new(40).fill { |_i| rand(8) } }
