@@ -1,10 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    gosu (0.10.6)
+    gosu (1.4.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  gosu (~> 0.10)
+  gosu
+
+BUNDLED WITH
+   2.4.10
