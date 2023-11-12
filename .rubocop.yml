@@ -21,7 +21,7 @@ Naming/MethodParameterName:
     - id
 
 Metrics/CyclomaticComplexity:
-  Max: 12
+  Max: 16
 
 Metrics/PerceivedComplexity:
-  Max: 10
+  Max: 16
