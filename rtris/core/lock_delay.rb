@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2010 Ramon E. Torres
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,61 +20,63 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Rtris::Core
+module Rtris
+  module Core
+    # TODO: move to Rtris::Piece?
+    class LockDelay
+      FRAMES = 15
 
-  #TODO: move to Rtris::Piece?
-  class LockDelay
-    FRAMES = 15
-
-    def initialize
-      restore
-    end
-
-    def request_lock(&callback)
-      @pre_locking = true
-      @callback = callback
-    end
-
-    def restore
-      @pre_locking = false
-      reset
-    end
-
-    def reset
-      @lock_delay = FRAMES
-    end
-
-    def on_frame
-      decrease_lock_delay if @pre_locking
-      if should_lock?
-        @callback.call()
+      def initialize
         restore
       end
-    end
 
-    def on_shift
-      restore
-    end
+      def request_lock(&callback)
+        @pre_locking = true
+        @callback = callback
+      end
 
-    def on_move
-      reset if pre_locking?
-    end
+      def restore
+        @pre_locking = false
+        reset
+      end
 
-    def on_rotate
-      on_move
-    end
+      def reset
+        @lock_delay = FRAMES
+      end
 
-    def should_lock?
-      pre_locking? && @lock_delay < 1
-    end
+      def on_frame
+        decrease_lock_delay if @pre_locking
+        return unless should_lock?
 
-    def pre_locking?
-      @pre_locking
-    end
+        @callback.call
+        restore
+      end
 
-    private
-    def decrease_lock_delay
-      @lock_delay -= 1
+      def on_shift
+        restore
+      end
+
+      def on_move
+        reset if pre_locking?
+      end
+
+      def on_rotate
+        on_move
+      end
+
+      def should_lock?
+        pre_locking? && @lock_delay < 1
+      end
+
+      def pre_locking?
+        @pre_locking
+      end
+
+      private
+
+      def decrease_lock_delay
+        @lock_delay -= 1
+      end
     end
   end
 end

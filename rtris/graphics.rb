@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2010 Ramon E. Torres
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -45,7 +47,7 @@ module Rtris
     end
 
     def draw_ghost_piece(piece)
-      piece.each_active_and_visible_cell do |x, y, type|
+      piece.each_active_and_visible_cell do |x, y, _type|
         block_x = (piece.x * BLOCK_WIDTH)  + (x * BLOCK_WIDTH) + BOARD_OFFSET_X
         block_y = (piece.y * BLOCK_HEIGHT) + (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y
         draw_ghost_block(block_x, block_y)
@@ -55,7 +57,7 @@ module Rtris
     def draw_board(board)
       board.each_active_and_visible_cell do |x, y, type|
         block_x = (x * BLOCK_WIDTH)  + BOARD_OFFSET_X
-        block_y = (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y;
+        block_y = (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y
         draw_block(block_x, block_y, type)
       end
     end
@@ -79,7 +81,7 @@ module Rtris
     private
 
     def draw_block(x, y, type)
-      index = type-1
+      index = type - 1
       @block_sprites[index].draw(x, y, 0)
     end
 
@@ -89,10 +91,10 @@ module Rtris
 
     def load_assets
       @font = Gosu::Font.new(@window, 'Arial', 72)
-      @block_sprites = Gosu::Image.load_tiles(@window, "rtris/assets/img/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, true)
-      @piece_sprites = Gosu::Image.load_tiles(@window, "rtris/assets/img/pieces.png", 72, 44, true)
-      @background = Gosu::Image.new(@window, "rtris/assets/img/background.png")
-      @ghost_block_sprite = Gosu::Image.new(@window, "rtris/assets/img/ghost_block.png")
+      @block_sprites = Gosu::Image.load_tiles(@window, 'rtris/assets/img/blocks.png', BLOCK_WIDTH, BLOCK_HEIGHT, true)
+      @piece_sprites = Gosu::Image.load_tiles(@window, 'rtris/assets/img/pieces.png', 72, 44, true)
+      @background = Gosu::Image.new(@window, 'rtris/assets/img/background.png')
+      @ghost_block_sprite = Gosu::Image.new(@window, 'rtris/assets/img/ghost_block.png')
     end
   end
 end

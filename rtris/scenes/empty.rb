@@ -1,21 +1,17 @@
-module Rtris::Scenes
-  class Empty
-    def initialize(sound)
-    end
+# frozen_string_literal: true
 
-    def terminate
-    end
+module Rtris
+  module Scenes
+    class Empty
+      def terminate; end
 
-    def update
-    end
+      def update; end
 
-    def draw
-    end
+      def draw; end
 
-    def button_down(id)
-    end
+      def button_down(id); end
 
-    def button_up(id)
+      def button_up(id); end
     end
   end
 end

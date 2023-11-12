@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2010 Ramon E. Torres
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,19 +20,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Rtris::Core
-  module BlockMatrix
-    def each_cell(&block)
-      @cells.each_with_index do |row, y|
-        row.each_with_index do |cell, x|
-          block.call(x, y, cell)
+module Rtris
+  module Core
+    module BlockMatrix
+      def each_cell(&block)
+        @cells.each_with_index do |row, y|
+          row.each_with_index do |cell, x|
+            block.call(x, y, cell)
+          end
         end
       end
-    end
 
-    def each_active_cell(&block)
-      each_cell do |x, y, cell|
-        block.call(x, y, cell) unless cell == 0
+      def each_active_cell(&block)
+        each_cell do |x, y, cell|
+          block.call(x, y, cell) unless cell.zero?
+        end
       end
     end
   end

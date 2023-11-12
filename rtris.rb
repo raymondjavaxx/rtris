@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'gosu'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -5,5 +7,4 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 module::Rtris
 end
 
-require "rtris/window"
-
+require 'rtris/window'

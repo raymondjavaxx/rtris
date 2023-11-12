@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2010 Ramon E. Torres
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,18 +23,18 @@
 module Rtris
   class Sound
     def initialize
-      sfx_dir = File.dirname(__FILE__) + "/assets/sfx"
+      sfx_dir = "#{File.dirname(__FILE__)}/assets/sfx"
 
-      #load sounds
-      @bg_music = Gosu::Song.new(sfx_dir + "/midi/korobeiniki.ogg")
-      @rotate_sfx = Gosu::Sample.new(sfx_dir + "/rotate.wav")
-      @beam_sfx = Gosu::Sample.new(sfx_dir + "/beam.wav")
+      # load sounds
+      @bg_music = Gosu::Song.new("#{sfx_dir}/midi/korobeiniki.ogg")
+      @rotate_sfx = Gosu::Sample.new("#{sfx_dir}/rotate.wav")
+      @beam_sfx = Gosu::Sample.new("#{sfx_dir}/beam.wav")
 
-      @line_voices = Array.new
-      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/double.wav"))
-      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/double.wav"))
-      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/triple.wav"))
-      #@line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/tetris.wav"))
+      @line_voices = []
+      # @line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/double.wav"))
+      # @line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/double.wav"))
+      # @line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/triple.wav"))
+      # @line_voices.push(Gosu::Sample.new(sfx_dir + "/voices/tetris.wav"))
     end
 
     def play_music

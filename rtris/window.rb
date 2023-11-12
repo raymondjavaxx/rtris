@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rtris/scenes/empty'
 require 'rtris/scenes/menu'
 require 'rtris/scenes/game'
@@ -6,18 +8,16 @@ module Rtris
   class Window < Gosu::Window
     SCREEN_WIDTH  = 1280
     SCREEN_HEIGHT = 720
-    
-    attr_accessor :scene
 
     def initialize
       super(SCREEN_WIDTH, SCREEN_HEIGHT, false)
-      self.caption = "Rtris"
+      self.caption = 'Rtris'
 
       @scene = Rtris::Scenes::Menu.new(self)
     end
 
     def scene=(new_scene)
-      @scene.terminate if @scene
+      @scene&.terminate
       @scene = new_scene
     end
 

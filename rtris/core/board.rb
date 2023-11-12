@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2010 Ramon E. Torres
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,86 +22,82 @@
 
 require 'rtris/core/block_matrix'
 
-module Rtris::Core
+module Rtris
+  module Core
+    class Board
+      WIDTH  = 10
+      HEIGHT = 22
 
-  class Board
+      include BlockMatrix
 
-    WIDTH  = 10
-    HEIGHT = 22
-
-    include BlockMatrix
-
-    def initialize
-      @cells = Array.new(HEIGHT).map!{ Array.new(WIDTH).fill(0) }
-    end
-
-    def piece_collides?(piece, peek_x = 0, peek_y = 0)
-      collides = false
-      piece.each_active_cell do |x, y, cell|
-        x += piece.x + peek_x
-        y += piece.y + peek_y
-        collides = collides || !cell_is_free?(x, y)
+      def initialize
+        @cells = Array.new(HEIGHT).map! { Array.new(WIDTH).fill(0) }
       end
 
-      collides
-    end
+      def piece_collides?(piece, peek_x = 0, peek_y = 0)
+        collides = false
+        piece.each_active_cell do |x, y, _cell|
+          x += piece.x + peek_x
+          y += piece.y + peek_y
+          collides ||= !cell_is_free?(x, y)
+        end
 
-    def obstructed?
-      @cells.first(2).flatten.any? { |cell| cell > 0 }
-    end
+        collides
+      end
 
-    def clear_lines
-      cleared_lines = 0
+      def obstructed?
+        @cells.first(2).flatten.any?(&:positive?)
+      end
 
-      HEIGHT.times do |line|
-        if line_clear?(line)
-          collapse(line)
-          cleared_lines += 1
+      def clear_lines
+        cleared_lines = 0
+
+        HEIGHT.times do |line|
+          if line_clear?(line)
+            collapse(line)
+            cleared_lines += 1
+          end
+        end
+
+        cleared_lines
+      end
+
+      def merge_piece(piece)
+        piece.each_active_cell do |x, y, cell|
+          x += piece.x
+          y += piece.y
+          @cells[y][x] = cell
         end
       end
 
-      cleared_lines
-    end
-
-    def merge_piece(piece)
-      piece.each_active_cell do |x, y, cell|
-        x += piece.x
-        y += piece.y
-        @cells[y][x] = cell
-      end
-    end
-
-    def each_active_and_visible_cell(&block)
-      each_active_cell do |cell_x, cell_y, cell|
-        block.call(cell_x, cell_y, cell) if cell_y > 1
-      end
-    end
-
-    private
-
-    def collapse(line)
-      @cells[line].fill(0)
-      line.downto(1) do |i|
-        @cells[i].replace(@cells[i-1])
+      def each_active_and_visible_cell(&block)
+        each_active_cell do |cell_x, cell_y, cell|
+          block.call(cell_x, cell_y, cell) if cell_y > 1
+        end
       end
 
-      @cells[0].fill(0)
-    end
+      private
 
-    def line_clear?(line)
-      @cells[line].flatten.all? { |cell| cell > 0 }
-    end
+      def collapse(line)
+        @cells[line].fill(0)
+        line.downto(1) do |i|
+          @cells[i].replace(@cells[i - 1])
+        end
 
-    def cell_is_free?(x, y)
-      if x < 0 || x >= WIDTH
-        return false
+        @cells[0].fill(0)
       end
 
-      if y < 0 || y >= HEIGHT
-        return false
+      def line_clear?(line)
+        @cells[line].flatten.all?(&:positive?)
       end
 
-      return @cells[y][x] == 0
+      def cell_is_free?(x, y)
+        return false if x.negative? || x >= WIDTH
+
+        return false if y.negative? || y >= HEIGHT
+
+        (@cells[y][x]).zero?
+      end
     end
   end
 end

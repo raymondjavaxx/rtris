@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2010 Ramon E. Torres
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,22 +22,24 @@
 
 require 'rtris/core/piece'
 
-module Rtris::Core
+module Rtris
+  module Core
+    # Random Generator (Bag of seven)
+    class RandomGenerator
+      def initialize
+        fill_bag
+      end
 
-  # Random Generator (Bag of seven)
-  class RandomGenerator
-    def initialize
-      fill_bag
-    end
+      def make_piece
+        fill_bag if @bag.empty?
+        Piece.new(@bag.pop)
+      end
 
-    def make_piece
-      fill_bag if @bag.empty?
-      return Piece.new(@bag.pop)
-    end
+      private
 
-    private
-    def fill_bag
-      @bag = (0..6).to_a.sort_by { rand }
+      def fill_bag
+        @bag = (0..6).to_a.sort_by { rand }
+      end
     end
   end
 end

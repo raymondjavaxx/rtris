@@ -1,0 +1,27 @@
+require:
+  - rubocop-rake
+
+AllCops:
+  TargetRubyVersion: 2.7
+  NewCops: enable
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - x
+    - y
+    - id
+
+Metrics/CyclomaticComplexity:
+  Max: 12
+
+Metrics/PerceivedComplexity:
+  Max: 10
