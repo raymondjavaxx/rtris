@@ -3,7 +3,7 @@
 module Rtris
   module Core
     class HardDropTrail
-      ANIMATION = Animation::Timeline.build do |timeline|
+      TIMELINE = Animation::Timeline.build do |timeline|
         timeline.lane(:opacity) do |lane|
           lane.keyframe(time: 0, value: 1, easing: :ease_out_cubic)
           lane.keyframe(time: 40, value: 0)
@@ -19,7 +19,7 @@ module Rtris
       end
 
       def dead?
-        @frame >= ANIMATION.total_duration
+        @frame >= TIMELINE.total_duration
       end
 
       def tick
@@ -27,7 +27,7 @@ module Rtris
       end
 
       def opacity
-        ANIMATION.value_at(:opacity, @frame)
+        TIMELINE.value_at(:opacity, @frame)
       end
     end
   end

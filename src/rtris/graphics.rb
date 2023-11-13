@@ -35,16 +35,19 @@ module Rtris
 
     def initialize(window)
       @window = window
+      @font_cache = {}
       load_assets
     end
 
     def draw_score(score)
-      @large_font.draw_text_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
-      @large_font.draw_text_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+      score_font = font(72)
+      score_font.draw_text_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+      score_font.draw_text_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
     end
 
     def draw_paused
-      @medium_font.draw_text_rel('Pause', 640, 360, 0, 0.5, 0.5, 1, 1, PAUSED_TEXT_COLOR)
+      paused_font = font(48)
+      paused_font.draw_text_rel('Pause', 640, 360, 0, 0.5, 0.5, 1, 1, PAUSED_TEXT_COLOR)
     end
 
     def draw_current_piece(piece, offset:)
@@ -93,6 +96,10 @@ module Rtris
       @hard_drop_trail_sprite.draw(screen_x, screen_y, 0, 1, 1, Gosu::Color.new(opacity * 255, 255, 255, 255))
     end
 
+    def font(size)
+      @font_cache[size] ||= Gosu::Font.new(size, name: 'Arial')
+    end
+
     private
 
     def draw_block(x, y, type)
@@ -101,12 +108,13 @@ module Rtris
     end
 
     def draw_ghost_block(x, y)
-      @ghost_block_sprite.draw(x, y, 0)
+      @ghost_block_sprite.draw(x, y, 0, 1, 1, Gosu::Color.new(128, 255, 255, 255))
     end
 
     def load_assets
-      @large_font = Gosu::Font.new(72, name: 'Arial')
-      @medium_font = Gosu::Font.new(48, name: 'Arial')
+      # Preload font sizes
+      font_sizes = [24, 32, 48, 72]
+      font_sizes.each { |size| font(size) }
 
       assets_path = File.expand_path('assets/img', __dir__)
       @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, tileable: true)

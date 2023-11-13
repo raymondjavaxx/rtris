@@ -3,7 +3,7 @@
 module Rtris
   module Core
     class LineClearTextAnimation
-      ANIMATION = Rtris::Animation::Timeline.build do |t|
+      TIMELINE = Rtris::Animation::Timeline.build do |t|
         t.lane(:y_offset) do |y_offset|
           y_offset.keyframe(time: 0, value: 0, easing: :ease_out_cubic)
           y_offset.keyframe(time: 25, value: -100)
@@ -23,6 +23,13 @@ module Rtris
         end
       end
 
+      LINE_CLEAR_TEXTS = {
+        1 => 'SINGLE',
+        2 => 'DOUBLE',
+        3 => 'TRIPLE',
+        4 => 'RTRIS'
+      }.freeze
+
       def initialize(x, y, lines:, score:)
         @x = x
         @y = y
@@ -32,7 +39,7 @@ module Rtris
       end
 
       def dead?
-        @frame >= ANIMATION.total_duration
+        @frame >= TIMELINE.total_duration
       end
 
       def tick
@@ -40,12 +47,12 @@ module Rtris
       end
 
       def draw(graphics)
-        y_offset = ANIMATION.value_at(:y_offset, @frame)
-        opacity = ANIMATION.value_at(:opacity, @frame)
-        label2_opacity = ANIMATION.value_at(:label2_opacity, @frame)
+        y_offset = TIMELINE.value_at(:y_offset, @frame)
+        opacity = TIMELINE.value_at(:opacity, @frame)
+        label2_opacity = TIMELINE.value_at(:label2_opacity, @frame)
 
-        graphics.medium_font.draw_text_rel(
-          @lines.to_s,
+        graphics.font(32).draw_text_rel(
+          LINE_CLEAR_TEXTS[@lines],
           @x,
           @y + y_offset,
           0,
@@ -56,10 +63,10 @@ module Rtris
           Gosu::Color.new((opacity * 255).to_i, 255, 255, 255)
         )
 
-        graphics.medium_font.draw_text_rel(
+        graphics.font(24).draw_text_rel(
           "+#{@score}",
           @x,
-          @y + 64 + y_offset,
+          @y + 32 + y_offset,
           0,
           0.5,
           1,
