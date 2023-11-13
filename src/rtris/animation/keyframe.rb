@@ -66,10 +66,6 @@ module Rtris
         t -= 2
         (t * t * t / 2) + 1
       end
-
-      def elastic(t)
-        -2**(10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math::PI)
-      end
     end
   end
 end

@@ -3,28 +3,31 @@
 module Rtris
   module Core
     class HardDropTrail
-      ##
-      # Time in frames before the trail disappears.
-      DEFAULT_LIFESPAN = 25
+      ANIMATION = Animation::Timeline.build do |timeline|
+        timeline.lane(:opacity) do |lane|
+          lane.keyframe(time: 0, value: 1, easing: :ease_out_cubic)
+          lane.keyframe(time: 40, value: 0)
+        end
+      end
 
       attr_accessor :x, :y, :width
 
       def initialize(x, y)
         @x = x
         @y = y
-        @lifespan = DEFAULT_LIFESPAN
+        @frame = 0
       end
 
       def dead?
-        @lifespan <= 0
+        @frame >= ANIMATION.total_duration
       end
 
       def tick
-        @lifespan -= 1
+        @frame += 1
       end
 
       def opacity
-        @lifespan.to_f / DEFAULT_LIFESPAN
+        ANIMATION.value_at(:opacity, @frame)
       end
     end
   end

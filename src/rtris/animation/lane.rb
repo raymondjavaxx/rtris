@@ -13,6 +13,10 @@ module Rtris
         _prime_cache!
       end
 
+      def total_duration
+        @keyframes.last&.time || 0
+      end
+
       def value_at(time)
         @cached_values[time] ||= _value_at(time)
       end
@@ -29,7 +33,6 @@ module Rtris
       private
 
       def _prime_cache!
-        total_duration = @keyframes.sum(&:time)
         0.upto(total_duration) do |time|
           value_at(time)
         end

@@ -7,6 +7,10 @@ module Rtris
         @lanes = lanes
       end
 
+      def total_duration
+        @total_duration ||= @lanes.values.map(&:total_duration).max
+      end
+
       def self.build(&block)
         builder = Builder.new
         block.call(builder)

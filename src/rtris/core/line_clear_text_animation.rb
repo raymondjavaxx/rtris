@@ -4,10 +4,10 @@ module Rtris
   module Core
     class LineClearTextAnimation
       ANIMATION = Rtris::Animation::Timeline.build do |t|
-        t.lane(:y_offset) do |y|
-          y.keyframe(time: 0, value: 0, easing: :ease_out_quad)
-          y.keyframe(time: 25, value: -100)
-          y.keyframe(time: 60, value: -100)
+        t.lane(:y_offset) do |y_offset|
+          y_offset.keyframe(time: 0, value: 0, easing: :ease_out_cubic)
+          y_offset.keyframe(time: 25, value: -100)
+          y_offset.keyframe(time: 60, value: -100)
         end
 
         t.lane(:opacity) do |opacity|
@@ -23,8 +23,6 @@ module Rtris
         end
       end
 
-      DURATION = 60
-
       def initialize(x, y, lines:, score:)
         @x = x
         @y = y
@@ -34,7 +32,7 @@ module Rtris
       end
 
       def dead?
-        @frame >= DURATION
+        @frame >= ANIMATION.total_duration
       end
 
       def tick
