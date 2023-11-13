@@ -41,6 +41,7 @@ module Rtris
 
         @fall_speed_cache = {}
         @hard_drop_trails = []
+        @animations = []
       end
 
       def fall_speed
@@ -114,7 +115,7 @@ module Rtris
         return unless cleared_lines.positive?
 
         @score.add_lines cleared_lines
-        # @sound.play_line_voice(cleared_lines)
+        @animations << LineClearTextAnimation.new(1280 / 2, 720 / 2, lines: cleared_lines, score: 300)
       end
 
       def ghost_piece
@@ -145,7 +146,16 @@ module Rtris
         @hard_drop_trails.each(&:tick)
         @hard_drop_trails.reject!(&:dead?)
 
+        @animations.each(&:tick)
+        @animations.reject!(&:dead?)
+
         do_physics
+      end
+
+      def draw(graphics)
+        @animations.each do |animation|
+          animation.draw(graphics)
+        end
       end
 
       private

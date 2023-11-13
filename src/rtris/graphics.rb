@@ -31,6 +31,8 @@ module Rtris
     SCORE_TEXT_COLOR = Gosu::Color.new(0xFF_204B6C)
     PAUSED_TEXT_COLOR = Gosu::Color.new(0xFF_FFFFFF)
 
+    attr_accessor :medium_font
+
     def initialize(window)
       @window = window
       load_assets

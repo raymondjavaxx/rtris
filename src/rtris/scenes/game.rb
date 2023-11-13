@@ -49,6 +49,7 @@ module Rtris
           @graphics.draw_piece_queue(@game.piece_queue)
         end
         @graphics.draw_score(@game.score)
+        @game.draw(@graphics)
       end
 
       def button_up(id)
