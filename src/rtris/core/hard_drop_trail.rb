@@ -2,7 +2,7 @@
 
 module Rtris
   module Core
-    class HardDropTrail
+    class HardDropTrail < Rtris::Action::TimelineAction
       TIMELINE = Animation::Timeline.build do |timeline|
         timeline.lane(:opacity) do |lane|
           lane.keyframe(time: 0, value: 1, easing: :ease_out_cubic)
@@ -10,24 +10,15 @@ module Rtris
         end
       end
 
-      attr_accessor :x, :y, :width
-
       def initialize(x, y)
         @x = x
         @y = y
-        @frame = 0
+        super(TIMELINE)
       end
 
-      def dead?
-        @frame >= TIMELINE.total_duration
-      end
-
-      def tick
-        @frame += 1
-      end
-
-      def opacity
-        TIMELINE.value_at(:opacity, @frame)
+      def draw(graphics)
+        opacity = timeline.value_at(:opacity, @frame)
+        graphics.draw_hard_drop_trail(x: @x, y: @y, opacity: opacity)
       end
     end
   end

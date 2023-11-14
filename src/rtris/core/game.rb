@@ -41,7 +41,6 @@ module Rtris
         @current_piece = @piece_queue.pop
 
         @fall_speed_cache = {}
-        @hard_drop_trails = []
         @animations = []
       end
 
@@ -99,7 +98,7 @@ module Rtris
         @current_piece.y += 1 until @board.piece_collides?(@current_piece, 0, 1)
 
         @current_piece.each_top_cell do |cell_x, cell_y|
-          @hard_drop_trails << HardDropTrail.new(cell_x, cell_y)
+          @animations << HardDropTrail.new(cell_x, cell_y)
         end
 
         delta = @current_piece.y - origin
@@ -151,9 +150,6 @@ module Rtris
         @input.tick
         @lock_delay.on_frame
 
-        @hard_drop_trails.each(&:tick)
-        @hard_drop_trails.reject!(&:dead?)
-
         @animations.each(&:tick)
         @animations.reject!(&:dead?)
 
@@ -163,10 +159,6 @@ module Rtris
       def draw(graphics)
         Gosu.translate(0, @y_offset) do
           graphics.draw_board(@board)
-
-          @hard_drop_trails.each do |trail|
-            graphics.draw_hard_drop_trail(x: trail.x, y: trail.y, opacity: trail.opacity)
-          end
         end
 
         graphics.draw_ghost_piece(ghost_piece)
