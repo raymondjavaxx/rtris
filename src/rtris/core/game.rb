@@ -23,7 +23,7 @@
 module Rtris
   module Core
     class Game
-      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input, :hard_drop_trails
+      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input, :hard_drop_trails, :y_offset
 
       def initialize(sound)
         @sound = sound
@@ -36,6 +36,7 @@ module Rtris
         @input = Input.new
 
         @acc = 0
+        @y_offset = 0
         @pre_locking = false
         @current_piece = @piece_queue.pop
 
@@ -104,6 +105,8 @@ module Rtris
         delta = @current_piece.y - origin
         @score.hard_drop delta
         lock_piece
+
+        @animations << ShakeScreenAction.new(self)
       end
 
       def lock_piece
@@ -158,10 +161,12 @@ module Rtris
       end
 
       def draw(graphics)
-        graphics.draw_board(@board)
+        Gosu.translate(0, @y_offset) do
+          graphics.draw_board(@board)
 
-        @hard_drop_trails.each do |trail|
-          graphics.draw_hard_drop_trail(x: trail.x, y: trail.y, opacity: trail.opacity)
+          @hard_drop_trails.each do |trail|
+            graphics.draw_hard_drop_trail(x: trail.x, y: trail.y, opacity: trail.opacity)
+          end
         end
 
         graphics.draw_ghost_piece(ghost_piece)
