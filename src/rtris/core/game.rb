@@ -118,7 +118,7 @@ module Rtris
         return unless cleared_lines.positive?
 
         @score.add_lines cleared_lines
-        @animations << LineClearTextAnimation.new(
+        @animations << LineClearTextAction.new(
           Constants::BOARD_WIDTH_PX / 2,
           Constants::BOARD_HEIGHT_PX / 2,
           lines: cleared_lines,

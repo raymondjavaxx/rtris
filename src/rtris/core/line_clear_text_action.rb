@@ -2,7 +2,7 @@
 
 module Rtris
   module Core
-    class LineClearTextAnimation < Rtris::Action::TimelineAction
+    class LineClearTextAction < Rtris::Action::TimelineAction
       TIMELINE = Rtris::Animation::Timeline.build do |t|
         t.lane(:y_offset) do |y_offset|
           y_offset.keyframe(time: 0, value: 0, easing: :ease_out_cubic)
@@ -35,11 +35,7 @@ module Rtris
         @y = y
         @lines = lines
         @score = score
-        super()
-      end
-
-      def dead?
-        frame >= TIMELINE.total_duration
+        super(TIMELINE)
       end
 
       def draw(graphics)
@@ -71,15 +67,15 @@ module Rtris
       private
 
       def y_offset
-        TIMELINE.value_at(:y_offset, frame)
+        timeline.value_at(:y_offset, frame)
       end
 
       def opacity
-        TIMELINE.value_at(:opacity, frame)
+        timeline.value_at(:opacity, frame)
       end
 
       def label2_opacity
-        TIMELINE.value_at(:label2_opacity, frame)
+        timeline.value_at(:label2_opacity, frame)
       end
     end
   end
