@@ -113,14 +113,18 @@ module Rtris
         @board.merge_piece(@current_piece)
         @current_piece = @piece_queue.pop
 
-        cleared_lines = @board.clear_lines
-        return unless cleared_lines.positive?
+        rows_to_clear = @board.scan_lines
+        return unless rows_to_clear.any?
 
-        @score.add_lines cleared_lines
+        @actions << ClearLinesAction.new(rows_to_clear) do
+          @board.clear_lines
+        end
+
+        @score.add_lines(rows_to_clear.size)
         @actions << LineClearTextAction.new(
           Constants::BOARD_WIDTH_PX / 2,
           Constants::BOARD_HEIGHT_PX / 2,
-          lines: cleared_lines,
+          lines: rows_to_clear.size,
           score: 300
         )
       end
@@ -151,9 +155,9 @@ module Rtris
         @lock_delay.on_frame
 
         @actions.each(&:tick)
-        @actions.reject!(&:dead?)
-
         do_physics
+
+        @actions.reject!(&:dead?)
       end
 
       def draw(graphics)

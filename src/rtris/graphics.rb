@@ -25,7 +25,7 @@ module Rtris
     SCORE_TEXT_COLOR = Gosu::Color.new(0xFF_204B6C)
     PAUSED_TEXT_COLOR = Gosu::Color.new(0xFF_FFFFFF)
 
-    attr_accessor :medium_font
+    attr_accessor :particle
 
     def initialize(window)
       @window = window
@@ -117,6 +117,7 @@ module Rtris
       @background = Gosu::Image.new("#{assets_path}/background.png")
       @ghost_block_sprite = Gosu::Image.new("#{assets_path}/ghost_block.png")
       @hard_drop_trail_sprite = Gosu::Image.new("#{assets_path}/hard_drop_trail.png")
+      @particle = Gosu::Image.new("#{assets_path}/particle.png")
     end
   end
 end

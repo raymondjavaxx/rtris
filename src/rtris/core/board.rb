@@ -47,6 +47,16 @@ module Rtris
         @cells.first(2).flatten.any?(&:positive?)
       end
 
+      def scan_lines
+        rows = []
+
+        HEIGHT.times do |line|
+          rows << line if line_clear?(line)
+        end
+
+        rows
+      end
+
       def clear_lines
         cleared_lines = 0
 
