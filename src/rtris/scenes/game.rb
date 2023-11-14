@@ -12,13 +12,12 @@ module Rtris
         @sound = Rtris::Sound.new
         @graphics = Rtris::Graphics.new(window)
         @game = Rtris::Core::Game.new(@sound)
-        @paused = false
       end
 
-      def toggle_pause
-        @paused = !@paused
+      def toggle_pause!
+        @game.toggle_pause!
 
-        if @paused
+        if @game.paused
           @sound.pause_music
         else
           @sound.play_music
@@ -30,24 +29,20 @@ module Rtris
       end
 
       def update
-        @game.update unless @paused
+        @game.update
       end
 
       def draw
         @graphics.draw_background
-        if @paused
-          @graphics.draw_paused
-        else
-          Gosu.translate(Constants::BOARD_OFFSET_X, Constants::BOARD_OFFSET_Y) do
-            @game.draw(@graphics)
-          end
-          @graphics.draw_piece_queue(@game.piece_queue)
+        Gosu.translate(Constants::BOARD_OFFSET_X, Constants::BOARD_OFFSET_Y) do
+          @game.draw(@graphics)
         end
+        @graphics.draw_piece_queue(@game.piece_queue, paused: @game.paused)
         @graphics.draw_score(@game.score)
       end
 
       def button_up(id)
-        return if @paused
+        return if @game.paused
 
         case id
         when Gosu::KbUp, Gamepad::ROTATE
@@ -68,13 +63,13 @@ module Rtris
       def button_down(id)
         case id
         when Gosu::KB_RETURN, Gamepad::ENTER
-          toggle_pause
+          toggle_pause!
         when Gosu::KB_ESCAPE
           # @window.scene = Menu.new(@window)
           @window.close
         end
 
-        return if @paused
+        return if @game.paused
 
         case id
         when Gosu::KB_UP, Gamepad::ROTATE

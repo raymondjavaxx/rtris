@@ -23,7 +23,7 @@
 module Rtris
   module Core
     class Game
-      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input, :hard_drop_trails, :y_offset
+      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input, :hard_drop_trails, :y_offset, :paused
 
       def initialize(sound)
         @sound = sound
@@ -40,8 +40,13 @@ module Rtris
         @pre_locking = false
         @current_piece = @piece_queue.pop
 
+        @paused = false
         @fall_speed_cache = {}
         @actions = []
+      end
+
+      def toggle_pause!
+        @paused = !@paused
       end
 
       def fall_speed
@@ -137,6 +142,8 @@ module Rtris
       end
 
       def update
+        return if @paused
+
         if @input.left?
           move_left
         elsif @input.right?
@@ -161,15 +168,31 @@ module Rtris
       end
 
       def draw(graphics)
-        Gosu.translate(0, @y_offset) do
-          graphics.draw_board(@board)
-        end
+        Gosu.translate(10, 10) do
+          Gosu.translate(0, @y_offset) do
+            graphics.playfield.draw(-10, -10)
 
-        graphics.draw_ghost_piece(ghost_piece)
-        graphics.draw_current_piece(@current_piece, offset: 0)
+            if @paused
+              Gosu.translate(Constants::BOARD_WIDTH_PX / 2, Constants::BOARD_HEIGHT_PX / 2) do
+                font = graphics.font(48)
+                font.draw_text_rel('Pause', 0, 0, 0, 0.5, 0.5, 1, 1, Gosu::Color::WHITE)
+              end
+            else
+              Gosu.translate(0, -Constants::BLOCK_SIZE * 2) do
+                graphics.draw_board(@board)
+              end
+            end
+          end
 
-        @actions.each do |animation|
-          animation.draw(graphics)
+          unless @paused
+            Gosu.translate(0, -Constants::BLOCK_SIZE * 2) do
+              graphics.draw_ghost_piece(ghost_piece)
+              graphics.draw_current_piece(@current_piece, offset: 0)
+              @actions.each do |animation|
+                animation.draw(graphics)
+              end
+            end
+          end
         end
       end
 

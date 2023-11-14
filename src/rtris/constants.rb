@@ -4,8 +4,8 @@ module Rtris
   module Constants
     BLOCK_SIZE = 32
 
-    BOARD_OFFSET_X = 480
-    BOARD_OFFSET_Y = -24
+    BOARD_OFFSET_X = 470
+    BOARD_OFFSET_Y = 30
 
     BOARD_WIDTH  = 10
     BOARD_HEIGHT = 20

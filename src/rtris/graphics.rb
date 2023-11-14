@@ -25,7 +25,7 @@ module Rtris
     SCORE_TEXT_COLOR = Gosu::Color.new(0xFF_204B6C)
     PAUSED_TEXT_COLOR = Gosu::Color.new(0xFF_FFFFFF)
 
-    attr_accessor :particle
+    attr_reader :particle, :playfield
 
     def initialize(window)
       @window = window
@@ -34,14 +34,25 @@ module Rtris
     end
 
     def draw_score(score)
-      score_font = font(72)
-      score_font.draw_text_rel(score.level.to_s, 438, 257, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
-      score_font.draw_text_rel(score.goal.to_s, 438, 420, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
-    end
+      Gosu.translate(438, 64) do
+        label_font = font(22)
+        score_font = font(48)
+        label_font.draw_text_rel('SCORE', 0, 0, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+        score_font.draw_text_rel(score.points.to_s, 0, 38, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)        
+      end
 
-    def draw_paused
-      paused_font = font(48)
-      paused_font.draw_text_rel('Pause', 640, 360, 0, 0.5, 0.5, 1, 1, PAUSED_TEXT_COLOR)
+      small_font = font(22)
+      large_font = font(72)
+
+      Gosu.translate(438, 196) do
+        small_font.draw_text_rel('LEVEL', 0, 0, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+        large_font.draw_text_rel(score.level.to_s, 0, 48, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+      end
+
+      Gosu.translate(438, 360) do
+        small_font.draw_text_rel('LINES', 0, 0, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+        large_font.draw_text_rel(score.lines.to_s, 0, 48, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
+      end
     end
 
     def draw_current_piece(piece, offset:)
@@ -72,15 +83,27 @@ module Rtris
       @background.draw(0, 0, 0)
     end
 
-    def draw_piece_queue(queue)
+    def draw_piece_queue(queue, paused:)
       piece = queue.peek(0)
-      @piece_sprites[piece.type].draw(862, 128, 0)
 
-      4.times do |i|
-        piece = queue.peek(i + 1)
-        x = 862
-        y = 222 + (96 * i) + 26
-        @piece_sprites[piece.type].draw(x, y, 0)
+      Gosu.translate(897, 70) do
+        label_font = font(22)
+        label_font.draw_text_rel('NEXT', 0, 0, 0, 0.5, 0.5, 1, 1, SCORE_TEXT_COLOR)
+
+        Gosu.translate(0, 75) do
+          @single_piece_container.draw_rot(0, 0)
+          @piece_sprites[piece.type].draw_rot(0, 0) unless paused
+        end
+      end
+
+      @piece_queue_container.draw(842, 210)
+      unless paused
+        4.times do |i|
+          piece = queue.peek(i + 1)
+          x = 862
+          y = 222 + (96 * i) + 26
+          @piece_sprites[piece.type].draw(x, y, 0)
+        end
       end
     end
 
@@ -107,17 +130,25 @@ module Rtris
 
     def load_assets
       # Preload font sizes
-      font_sizes = [24, 32, 48, 72]
+      font_sizes = [22, 24, 32, 48, 72]
       font_sizes.each { |size| font(size) }
 
       assets_path = File.expand_path('assets/img', __dir__)
-      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", Constants::BLOCK_SIZE,
-                                              Constants::BLOCK_SIZE, tileable: true)
+      @block_sprites = Gosu::Image.load_tiles(
+        "#{assets_path}/blocks.png",
+        Constants::BLOCK_SIZE,
+        Constants::BLOCK_SIZE,
+        tileable: true
+      )
       @piece_sprites = Gosu::Image.load_tiles("#{assets_path}/pieces.png", 72, 44, tileable: true)
       @background = Gosu::Image.new("#{assets_path}/background.png")
       @ghost_block_sprite = Gosu::Image.new("#{assets_path}/ghost_block.png")
       @hard_drop_trail_sprite = Gosu::Image.new("#{assets_path}/hard_drop_trail.png")
       @particle = Gosu::Image.new("#{assets_path}/particle.png")
+      @playfield = Gosu::Image.new("#{assets_path}/playfield.png")
+
+      @single_piece_container = Gosu::Image.new("#{assets_path}/single_piece_container.png")
+      @piece_queue_container = Gosu::Image.new("#{assets_path}/piece_queue_container.png")
     end
   end
 end
