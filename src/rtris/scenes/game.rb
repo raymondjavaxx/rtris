@@ -38,18 +38,12 @@ module Rtris
         if @paused
           @graphics.draw_paused
         else
-          @graphics.draw_board(@game.board)
-
-          @game.hard_drop_trails.each do |trail|
-            @graphics.draw_hard_drop_trail(x: trail.x, y: trail.y, opacity: trail.opacity)
+          Gosu.translate(Constants::BOARD_OFFSET_X, Constants::BOARD_OFFSET_Y) do
+            @game.draw(@graphics)
           end
-
-          @graphics.draw_ghost_piece(@game.ghost_piece)
-          @graphics.draw_current_piece(@game.current_piece, offset: 0)
           @graphics.draw_piece_queue(@game.piece_queue)
         end
         @graphics.draw_score(@game.score)
-        @game.draw(@graphics)
       end
 
       def button_up(id)

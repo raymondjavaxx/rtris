@@ -22,12 +22,6 @@
 
 module Rtris
   class Graphics
-    BLOCK_WIDTH  = 32
-    BLOCK_HEIGHT = 32
-
-    BOARD_OFFSET_X = 480
-    BOARD_OFFSET_Y = -24
-
     SCORE_TEXT_COLOR = Gosu::Color.new(0xFF_204B6C)
     PAUSED_TEXT_COLOR = Gosu::Color.new(0xFF_FFFFFF)
 
@@ -52,24 +46,24 @@ module Rtris
 
     def draw_current_piece(piece, offset:)
       piece.each_active_and_visible_cell do |x, y, type|
-        block_x = (piece.x * BLOCK_WIDTH)  + (x * BLOCK_WIDTH) + BOARD_OFFSET_X
-        block_y = (piece.y * BLOCK_HEIGHT) + (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y
-        draw_block(block_x, block_y + (BLOCK_HEIGHT * offset), type)
+        block_x = (piece.x * Constants::BLOCK_SIZE)  + (x * Constants::BLOCK_SIZE)
+        block_y = (piece.y * Constants::BLOCK_SIZE) + (y * Constants::BLOCK_SIZE)
+        draw_block(block_x, block_y + (Constants::BLOCK_SIZE * offset), type)
       end
     end
 
     def draw_ghost_piece(piece)
       piece.each_active_and_visible_cell do |x, y, _type|
-        block_x = (piece.x * BLOCK_WIDTH)  + (x * BLOCK_WIDTH) + BOARD_OFFSET_X
-        block_y = (piece.y * BLOCK_HEIGHT) + (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y
+        block_x = (piece.x * Constants::BLOCK_SIZE) + (x * Constants::BLOCK_SIZE)
+        block_y = (piece.y * Constants::BLOCK_SIZE) + (y * Constants::BLOCK_SIZE)
         draw_ghost_block(block_x, block_y)
       end
     end
 
     def draw_board(board)
       board.each_active_and_visible_cell do |x, y, type|
-        block_x = (x * BLOCK_WIDTH)  + BOARD_OFFSET_X
-        block_y = (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y
+        block_x = (x * Constants::BLOCK_SIZE)
+        block_y = (y * Constants::BLOCK_SIZE)
         draw_block(block_x, block_y, type)
       end
     end
@@ -91,8 +85,8 @@ module Rtris
     end
 
     def draw_hard_drop_trail(x:, y:, opacity:)
-      screen_x = (x * BLOCK_WIDTH)  + BOARD_OFFSET_X
-      screen_y = (y * BLOCK_HEIGHT) + BOARD_OFFSET_Y - @hard_drop_trail_sprite.height
+      screen_x = (x * Constants::BLOCK_SIZE) 
+      screen_y = (y * Constants::BLOCK_SIZE) - @hard_drop_trail_sprite.height
       @hard_drop_trail_sprite.draw(screen_x, screen_y, 0, 1, 1, Gosu::Color.new(opacity * 255, 255, 255, 255))
     end
 
@@ -117,7 +111,7 @@ module Rtris
       font_sizes.each { |size| font(size) }
 
       assets_path = File.expand_path('assets/img', __dir__)
-      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", BLOCK_WIDTH, BLOCK_HEIGHT, tileable: true)
+      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", Constants::BLOCK_SIZE, Constants::BLOCK_SIZE, tileable: true)
       @piece_sprites = Gosu::Image.load_tiles("#{assets_path}/pieces.png", 72, 44, tileable: true)
       @background = Gosu::Image.new("#{assets_path}/background.png")
       @ghost_block_sprite = Gosu::Image.new("#{assets_path}/ghost_block.png")

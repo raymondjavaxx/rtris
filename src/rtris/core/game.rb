@@ -115,7 +115,7 @@ module Rtris
         return unless cleared_lines.positive?
 
         @score.add_lines cleared_lines
-        @animations << LineClearTextAnimation.new(1280 / 2, 720 / 2, lines: cleared_lines, score: 300)
+        @animations << LineClearTextAnimation.new(320 / 2, 600 / 2, lines: cleared_lines, score: 300)
       end
 
       def ghost_piece
@@ -153,6 +153,15 @@ module Rtris
       end
 
       def draw(graphics)
+        graphics.draw_board(@board)
+
+        @hard_drop_trails.each do |trail|
+          graphics.draw_hard_drop_trail(x: trail.x, y: trail.y, opacity: trail.opacity)
+        end
+
+        graphics.draw_ghost_piece(ghost_piece)
+        graphics.draw_current_piece(@current_piece, offset: 0)
+
         @animations.each do |animation|
           animation.draw(graphics)
         end
