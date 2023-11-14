@@ -70,14 +70,13 @@ module Rtris
         when Gosu::KB_RETURN, Gamepad::ENTER
           toggle_pause
         when Gosu::KB_ESCAPE
-          @window.scene = Menu.new(@window)
+          # @window.scene = Menu.new(@window)
+          @window.close
         end
 
         return if @paused
 
         case id
-        when Gosu::KB_ESCAPE
-          @window.scene = Menu.new(@window)
         when Gosu::KB_UP, Gamepad::ROTATE
           @game.input.key_pressed(:rotate)
         when Gosu::KB_LEFT_CONTROL, Gosu::KB_RIGHT_CONTROL, Gamepad::ROTATE_CCW

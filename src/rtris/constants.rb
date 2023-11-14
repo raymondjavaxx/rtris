@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Rtris
   module Constants
-    BLOCK_SIZE  = 32
+    BLOCK_SIZE = 32
 
     BOARD_OFFSET_X = 480
     BOARD_OFFSET_Y = -24

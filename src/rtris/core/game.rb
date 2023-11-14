@@ -115,7 +115,12 @@ module Rtris
         return unless cleared_lines.positive?
 
         @score.add_lines cleared_lines
-        @animations << LineClearTextAnimation.new(320 / 2, 600 / 2, lines: cleared_lines, score: 300)
+        @animations << LineClearTextAnimation.new(
+          Constants::BOARD_WIDTH_PX / 2,
+          Constants::BOARD_HEIGHT_PX / 2,
+          lines: cleared_lines,
+          score: 300
+        )
       end
 
       def ghost_piece

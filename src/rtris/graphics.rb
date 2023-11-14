@@ -46,7 +46,7 @@ module Rtris
 
     def draw_current_piece(piece, offset:)
       piece.each_active_and_visible_cell do |x, y, type|
-        block_x = (piece.x * Constants::BLOCK_SIZE)  + (x * Constants::BLOCK_SIZE)
+        block_x = (piece.x * Constants::BLOCK_SIZE) + (x * Constants::BLOCK_SIZE)
         block_y = (piece.y * Constants::BLOCK_SIZE) + (y * Constants::BLOCK_SIZE)
         draw_block(block_x, block_y + (Constants::BLOCK_SIZE * offset), type)
       end
@@ -85,7 +85,7 @@ module Rtris
     end
 
     def draw_hard_drop_trail(x:, y:, opacity:)
-      screen_x = (x * Constants::BLOCK_SIZE) 
+      screen_x = (x * Constants::BLOCK_SIZE)
       screen_y = (y * Constants::BLOCK_SIZE) - @hard_drop_trail_sprite.height
       @hard_drop_trail_sprite.draw(screen_x, screen_y, 0, 1, 1, Gosu::Color.new(opacity * 255, 255, 255, 255))
     end
@@ -111,7 +111,8 @@ module Rtris
       font_sizes.each { |size| font(size) }
 
       assets_path = File.expand_path('assets/img', __dir__)
-      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", Constants::BLOCK_SIZE, Constants::BLOCK_SIZE, tileable: true)
+      @block_sprites = Gosu::Image.load_tiles("#{assets_path}/blocks.png", Constants::BLOCK_SIZE,
+                                              Constants::BLOCK_SIZE, tileable: true)
       @piece_sprites = Gosu::Image.load_tiles("#{assets_path}/pieces.png", 72, 44, tileable: true)
       @background = Gosu::Image.new("#{assets_path}/background.png")
       @ghost_block_sprite = Gosu::Image.new("#{assets_path}/ghost_block.png")
