@@ -6,12 +6,13 @@ module Rtris
       TIMELINE = Animation::Timeline.build do |timeline|
         timeline.lane(:opacity) do |lane|
           lane.keyframe(time: 0, value: 0, easing: :ease_out_cubic)
-          lane.keyframe(time: 10, value: 1)
+          lane.keyframe(time: 8, value: 1)
+          lane.keyframe(time: 16, value: 0, easing: :ease_out_cubic)
         end
         timeline.lane(:scale) do |lane|
           lane.keyframe(time: 0, value: 0, easing: :ease_out_cubic)
-          lane.keyframe(time: 10, value: 1)
-          lane.keyframe(time: 10 + Constants::BOARD_WIDTH, value: 1)
+          lane.keyframe(time: 8, value: 1)
+          lane.keyframe(time: 16 + Constants::BOARD_WIDTH, value: 1)
         end
       end
 
@@ -30,6 +31,8 @@ module Rtris
         @rows.each do |row|
           Constants::BOARD_WIDTH.times do |col|
             scale = timeline.value_at(:scale, frame - col)
+            opacity = timeline.value_at(:opacity, frame - col)
+
             graphics.particle.draw_rot(
               (col * Constants::BLOCK_SIZE) + (Constants::BLOCK_SIZE / 2),
               (row * Constants::BLOCK_SIZE) + (Constants::BLOCK_SIZE / 2),
@@ -39,7 +42,7 @@ module Rtris
               0.5, # center_y
               scale, # scale_x
               scale, # scale_y
-              Gosu::Color.new((timeline.value_at(:opacity, frame) * 255).to_i, 255, 255, 255)
+              Gosu::Color.new((opacity * 255).to_i, 255, 255, 255)
             )
           end
         end
