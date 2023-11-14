@@ -41,7 +41,7 @@ module Rtris
         @current_piece = @piece_queue.pop
 
         @fall_speed_cache = {}
-        @animations = []
+        @actions = []
       end
 
       def fall_speed
@@ -98,14 +98,14 @@ module Rtris
         @current_piece.y += 1 until @board.piece_collides?(@current_piece, 0, 1)
 
         @current_piece.each_top_cell do |cell_x, cell_y|
-          @animations << HardDropTrail.new(cell_x, cell_y)
+          @actions << HardDropTrail.new(cell_x, cell_y)
         end
 
         delta = @current_piece.y - origin
         @score.hard_drop delta
         lock_piece
 
-        @animations << ShakeScreenAction.new(self)
+        @actions << ShakeScreenAction.new(self)
       end
 
       def lock_piece
@@ -117,7 +117,7 @@ module Rtris
         return unless cleared_lines.positive?
 
         @score.add_lines cleared_lines
-        @animations << LineClearTextAction.new(
+        @actions << LineClearTextAction.new(
           Constants::BOARD_WIDTH_PX / 2,
           Constants::BOARD_HEIGHT_PX / 2,
           lines: cleared_lines,
@@ -150,8 +150,8 @@ module Rtris
         @input.tick
         @lock_delay.on_frame
 
-        @animations.each(&:tick)
-        @animations.reject!(&:dead?)
+        @actions.each(&:tick)
+        @actions.reject!(&:dead?)
 
         do_physics
       end
@@ -164,7 +164,7 @@ module Rtris
         graphics.draw_ghost_piece(ghost_piece)
         graphics.draw_current_piece(@current_piece, offset: 0)
 
-        @animations.each do |animation|
+        @actions.each do |animation|
           animation.draw(graphics)
         end
       end
