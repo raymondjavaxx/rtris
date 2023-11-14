@@ -23,7 +23,7 @@
 module Rtris
   module Core
     class Game
-      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input, :hard_drop_trails, :y_offset, :paused
+      attr_accessor :current_piece, :board, :piece_queue, :score, :acc, :input, :y_offset, :paused
 
       def initialize(sound)
         @sound = sound

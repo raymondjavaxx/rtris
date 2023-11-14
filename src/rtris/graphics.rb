@@ -38,7 +38,7 @@ module Rtris
         label_font = font(22)
         score_font = font(48)
         label_font.draw_text_rel('SCORE', 0, 0, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
-        score_font.draw_text_rel(score.points.to_s, 0, 38, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)        
+        score_font.draw_text_rel(score.points.to_s, 0, 38, 0, 1.0, 0.5, 1, 1, SCORE_TEXT_COLOR)
       end
 
       small_font = font(22)
@@ -97,13 +97,13 @@ module Rtris
       end
 
       @piece_queue_container.draw(842, 210)
-      unless paused
-        4.times do |i|
-          piece = queue.peek(i + 1)
-          x = 862
-          y = 222 + (96 * i) + 26
-          @piece_sprites[piece.type].draw(x, y, 0)
-        end
+      return if paused
+
+      4.times do |i|
+        piece = queue.peek(i + 1)
+        x = 862
+        y = 222 + (96 * i) + 26
+        @piece_sprites[piece.type].draw(x, y, 0)
       end
     end
 
