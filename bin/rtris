@@ -2,6 +2,24 @@
 # frozen_string_literal: true
 
 require 'rtris'
+require 'optparse'
 
-window = Rtris::Window.new
+options = {
+  fullscreen: false
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: rtris [options]"
+
+  opts.on("-f", "--fullscreen", "Run in fullscreen mode") do |f|
+    options[:fullscreen] = f
+  end
+
+  opts.on("-v", "--version", "Print version") do |v|
+    puts Rtris::VERSION
+    exit
+  end
+end.parse!
+
+window = Rtris::Window.new(fullscreen: options[:fullscreen])
 window.show

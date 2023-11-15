@@ -5,8 +5,8 @@ module Rtris
     SCREEN_WIDTH  = 1280
     SCREEN_HEIGHT = 720
 
-    def initialize
-      super(SCREEN_WIDTH, SCREEN_HEIGHT, false)
+    def initialize(fullscreen:)
+      super(SCREEN_WIDTH, SCREEN_HEIGHT, fullscreen: fullscreen)
       self.caption = 'Rtris'
 
       @scene = Rtris::Scenes::Game.new(self)

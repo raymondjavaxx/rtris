@@ -2,5 +2,5 @@
 
 require_relative 'src/rtris'
 
-window = Rtris::Window.new
+window = Rtris::Window.new(fullscreen: false)
 window.show
