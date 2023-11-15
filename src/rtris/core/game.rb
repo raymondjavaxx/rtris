@@ -43,6 +43,7 @@ module Rtris
         @paused = false
         @fall_speed_cache = {}
         @actions = []
+        @game_over = false
       end
 
       def toggle_pause!
@@ -116,6 +117,12 @@ module Rtris
       def lock_piece
         @sound.play_beam
         @board.merge_piece(@current_piece)
+        if @board.obstructed?
+          @game_over = true
+          return
+          # TODO: game over animation
+        end
+
         @current_piece = @piece_queue.pop
 
         rows_to_clear = @board.scan_lines
@@ -144,6 +151,18 @@ module Rtris
       def update
         return if @paused
 
+        process_input unless @game_over
+
+        @input.tick
+        @lock_delay.on_frame
+
+        @actions.each(&:tick)
+        do_physics
+
+        @actions.reject!(&:dead?)
+      end
+
+      def process_input
         if @input.left?
           move_left
         elsif @input.right?
@@ -157,14 +176,6 @@ module Rtris
         elsif @input.rotate_ccw?
           rotate_piece(clockwise: false)
         end
-
-        @input.tick
-        @lock_delay.on_frame
-
-        @actions.each(&:tick)
-        do_physics
-
-        @actions.reject!(&:dead?)
       end
 
       def draw(graphics)
@@ -180,6 +191,12 @@ module Rtris
             else
               Gosu.translate(0, -Constants::BLOCK_SIZE * 2) do
                 graphics.draw_board(@board)
+              end
+              if @game_over
+                Gosu.translate(Constants::BOARD_WIDTH_PX / 2, Constants::BOARD_HEIGHT_PX / 2) do
+                  font = graphics.font(48)
+                  font.draw_text_rel('Game Over', 0, 0, 0, 0.5, 0.5, 1, 1, Gosu::Color::WHITE)
+                end
               end
             end
           end
@@ -212,7 +229,6 @@ module Rtris
             @score.soft_drop if true # TODO: @step == 0
           else
             @lock_delay.request_lock { lock_piece }
-            # puts "obstructed" if @board.obstructed?
           end
         end
       end
