@@ -17,5 +17,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'zeitwerk', '~> 2.6'
   spec.metadata['rubygems_mfa_required'] = 'true'
 
-  s.required_ruby_version = '>= 2.7.0'
+  spec.required_ruby_version = '>= 2.7.0'
 end
