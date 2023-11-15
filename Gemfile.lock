@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    rtris (0.1.0)
+      gosu (~> 1.4)
+      zeitwerk (~> 2.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -11,6 +18,7 @@ GEM
       racc
     racc (1.7.3)
     rainbow (3.1.1)
+    rake (13.1.0)
     regexp_parser (2.8.2)
     rexml (3.2.6)
     rubocop (1.57.2)
@@ -26,6 +34,8 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
+    rubocop-minitest (0.33.0)
+      rubocop (>= 1.39, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
     ruby-progressbar (1.13.0)
@@ -36,10 +46,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  gosu
+  bundler
+  rake
+  rtris!
   rubocop
+  rubocop-minitest
   rubocop-rake
-  zeitwerk
 
 BUNDLED WITH
    2.4.10

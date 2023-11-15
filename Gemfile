@@ -2,7 +2,4 @@
 
 source 'https://rubygems.org'
 
-gem 'gosu'
-gem 'rubocop'
-gem 'rubocop-rake'
-gem 'zeitwerk'
+gemspec

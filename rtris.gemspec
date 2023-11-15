@@ -15,7 +15,13 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'gosu', '~> 1.4'
   spec.add_dependency 'zeitwerk', '~> 2.6'
-  spec.metadata['rubygems_mfa_required'] = 'true'
+
+  spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-minitest'
+  spec.add_development_dependency 'rubocop-rake'
 
   spec.required_ruby_version = '>= 2.7.0'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end
